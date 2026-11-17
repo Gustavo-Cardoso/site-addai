@@ -67,52 +67,25 @@
     Você tem um <strong>rascunho</strong> não publicado neste navegador. Ele só aparece na prévia — os visitantes continuam vendo o conteúdo publicado até você clicar em <em>Publicar no site</em>.
   </div>
 
+  <nav class="abas-painel mb-4" aria-label="Partes do painel">
+    <ul class="nav nav-pills flex-nowrap flex-md-wrap gap-1" id="abasPainel" role="tablist">
+      <li class="nav-item" role="presentation"><button class="nav-link active" id="aba-inicio-btn" data-bs-toggle="pill" data-bs-target="#aba-inicio" type="button" role="tab" aria-controls="aba-inicio" aria-selected="true" data-aba="inicio">Início</button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-carrossel-btn" data-bs-toggle="pill" data-bs-target="#aba-carrossel" type="button" role="tab" aria-controls="aba-carrossel" aria-selected="false" data-aba="carrossel">Carrossel <span class="badge rounded-pill text-bg-light ms-1" data-conta="slidesWrap"></span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-informativos-btn" data-bs-toggle="pill" data-bs-target="#aba-informativos" type="button" role="tab" aria-controls="aba-informativos" aria-selected="false" data-aba="informativos">Informativos <span class="badge rounded-pill text-bg-light ms-1" data-conta="infosWrap"></span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-sobre-btn" data-bs-toggle="pill" data-bs-target="#aba-sobre" type="button" role="tab" aria-controls="aba-sobre" aria-selected="false" data-aba="sobre">Quem somos</button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-extras-btn" data-bs-toggle="pill" data-bs-target="#aba-extras" type="button" role="tab" aria-controls="aba-extras" aria-selected="false" data-aba="extras">Seções novas <span class="badge rounded-pill text-bg-light ms-1" data-conta="extrasWrap"></span></button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-impacto-btn" data-bs-toggle="pill" data-bs-target="#aba-impacto" type="button" role="tab" aria-controls="aba-impacto" aria-selected="false" data-aba="impacto">Impacto e parceiros</button></li>
+      <li class="nav-item" role="presentation"><button class="nav-link" id="aba-dados-btn" data-bs-toggle="pill" data-bs-target="#aba-dados" type="button" role="tab" aria-controls="aba-dados" aria-selected="false" data-aba="dados">Dados e backup</button></li>
+    </ul>
+  </nav>
+
+  <div class="tab-content">
+  <div class="tab-pane fade show active" id="aba-inicio" role="tabpanel" aria-labelledby="aba-inicio-btn" tabindex="0">
   <!-- ===== Seções ===== -->
   <h2 class="h4 fw-bold mb-1">Seções do site</h2>
   <p class="text-secondary small">Desligue o que a ADDAI ainda não usa. Informativos, Números de impacto e Parceiros também ficam escondidos enquanto estiverem vazios.
     Boas-vindas, Como ajudar e Contato ficam sempre visíveis.</p>
   <div class="card card-body mb-4" id="secoesWrap"></div>
-
-  <!-- ===== Seções personalizadas ===== -->
-  <div class="d-flex align-items-center justify-content-between mb-1">
-    <h2 class="h4 fw-bold mb-0">Seções personalizadas</h2>
-    <button type="button" class="btn btn-marca btn-sm" id="addExtra">+ Nova seção</button>
-  </div>
-  <p class="text-secondary small">Crie seções novas na página inicial (ex.: "Nossa história", "Eventos", "Transparência"). Escolha onde ela entra e, se quiser, coloque no menu — use o menu com moderação, para ele caber numa linha.</p>
-  <div id="extrasWrap" class="d-grid gap-3 mb-4"></div>
-
-  <!-- ===== Informativos ===== -->
-  <div class="d-flex align-items-center justify-content-between mb-1">
-    <h2 class="h4 fw-bold mb-0">Informativos</h2>
-    <button type="button" class="btn btn-marca btn-sm" id="addInfo">+ Novo informativo</button>
-  </div>
-  <p class="text-secondary small">Aparecem no site do mais recente para o mais antigo (pela data). A página inicial mostra os 4 primeiros; os demais ficam em "Ver todos os informativos".</p>
-  <div id="infosWrap" class="d-grid gap-3 mb-4"></div>
-
-  <!-- ===== Carrossel ===== -->
-  <div class="d-flex align-items-center justify-content-between mb-1">
-    <h2 class="h4 fw-bold mb-0">Imagens do carrossel</h2>
-    <button type="button" class="btn btn-marca btn-sm" id="addSlide">+ Adicionar slide</button>
-  </div>
-  <p class="text-secondary small">Fotos escolhidas do computador são reduzidas automaticamente e ficam embutidas no <code>conteudo.json</code>. Use sempre fotos com autorização de quem aparece nelas.</p>
-  <div id="slidesWrap" class="d-grid gap-3 mb-4"></div>
-
-  <!-- ===== Impacto ===== -->
-  <div class="d-flex align-items-center justify-content-between mb-1">
-    <h2 class="h4 fw-bold mb-0">Números de impacto</h2>
-    <button type="button" class="btn btn-marca btn-sm" id="addImpacto">+ Adicionar número</button>
-  </div>
-  <p class="text-secondary small">Ex.: valor "+120", texto "famílias acolhidas". Valor vazio aparece como marcador amarelo.</p>
-  <div id="impactoWrap" class="d-grid gap-2 mb-4"></div>
-
-  <!-- ===== Parceiros ===== -->
-  <div class="d-flex align-items-center justify-content-between mb-1">
-    <h2 class="h4 fw-bold mb-0">Parceiros</h2>
-    <button type="button" class="btn btn-marca btn-sm" id="addParceiro">+ Adicionar parceiro</button>
-  </div>
-  <p class="text-secondary small">Sem parceiros cadastrados, a seção não aparece no site. Prefira logos em PNG com fundo transparente.</p>
-  <div id="parceirosWrap" class="d-grid gap-3 mb-4"></div>
-
   <!-- ===== Textos ===== -->
   <h2 class="h4 fw-bold mb-3">Textos da página inicial</h2>
   <div class="card card-body mb-4">
@@ -121,7 +94,29 @@
     <div class="mb-3"><label class="form-label" for="t_bemvindoTexto">Texto de boas-vindas</label><textarea class="form-control" id="t_bemvindoTexto" rows="3"></textarea></div>
     <div><label class="form-label" for="t_chamadaDoacao">Título de "Como ajudar"</label><input class="form-control" id="t_chamadaDoacao"></div>
   </div>
+  </div>
 
+  <div class="tab-pane fade" id="aba-carrossel" role="tabpanel" aria-labelledby="aba-carrossel-btn" tabindex="0">
+  <!-- ===== Carrossel ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Imagens do carrossel</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addSlide">+ Adicionar slide</button>
+  </div>
+  <p class="text-secondary small">Fotos escolhidas do computador são reduzidas automaticamente e ficam embutidas no <code>conteudo.json</code>. Use sempre fotos com autorização de quem aparece nelas.</p>
+  <div class="lista-rolavel mb-4" tabindex="-1"><div id="slidesWrap" class="d-grid gap-3"></div></div>
+  </div>
+
+  <div class="tab-pane fade" id="aba-informativos" role="tabpanel" aria-labelledby="aba-informativos-btn" tabindex="0">
+  <!-- ===== Informativos ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Informativos</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addInfo">+ Novo informativo</button>
+  </div>
+  <p class="text-secondary small">Aparecem no site do mais recente para o mais antigo (pela data). A página inicial mostra os 4 primeiros; os demais ficam em "Ver todos os informativos".</p>
+  <div class="lista-rolavel mb-4" tabindex="-1"><div id="infosWrap" class="d-grid gap-3"></div></div>
+  </div>
+
+  <div class="tab-pane fade" id="aba-sobre" role="tabpanel" aria-labelledby="aba-sobre-btn" tabindex="0">
   <!-- ===== Quem somos ===== -->
   <h2 class="h4 fw-bold mb-1">Quem somos</h2>
   <p class="text-secondary small">Missão, visão ou valores em branco não aparecem no site. Para esconder a seção inteira, use "Seções do site".</p>
@@ -141,7 +136,36 @@
       </div>
     </div>
   </div>
+  </div>
 
+  <div class="tab-pane fade" id="aba-extras" role="tabpanel" aria-labelledby="aba-extras-btn" tabindex="0">
+  <!-- ===== Seções personalizadas ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Seções personalizadas</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addExtra">+ Nova seção</button>
+  </div>
+  <p class="text-secondary small">Crie seções novas na página inicial (ex.: "Nossa história", "Eventos", "Transparência"). Escolha onde ela entra e, se quiser, coloque no menu — use o menu com moderação, para ele caber numa linha.</p>
+  <div class="lista-rolavel mb-4" tabindex="-1"><div id="extrasWrap" class="d-grid gap-3"></div></div>
+  </div>
+
+  <div class="tab-pane fade" id="aba-impacto" role="tabpanel" aria-labelledby="aba-impacto-btn" tabindex="0">
+  <!-- ===== Impacto ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Números de impacto</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addImpacto">+ Adicionar número</button>
+  </div>
+  <p class="text-secondary small">Ex.: valor "+120", texto "famílias acolhidas". Valor vazio aparece como marcador amarelo.</p>
+  <div id="impactoWrap" class="d-grid gap-2 mb-4"></div>
+  <!-- ===== Parceiros ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Parceiros</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addParceiro">+ Adicionar parceiro</button>
+  </div>
+  <p class="text-secondary small">Sem parceiros cadastrados, a seção não aparece no site. Prefira logos em PNG com fundo transparente.</p>
+  <div class="lista-rolavel mb-4" tabindex="-1"><div id="parceirosWrap" class="d-grid gap-3"></div></div>
+  </div>
+
+  <div class="tab-pane fade" id="aba-dados" role="tabpanel" aria-labelledby="aba-dados-btn" tabindex="0">
   <!-- ===== Dados da associação ===== -->
   <h2 class="h4 fw-bold mb-1">Dados da associação</h2>
   <p class="text-secondary small">Campo vazio = o site mostra o marcador amarelo de "a preencher".</p>
@@ -155,13 +179,15 @@
       <div class="col-md-6"><label class="form-label" for="t_cnpj">CNPJ (aparece no rodapé)</label><input class="form-control" id="t_cnpj" placeholder="CNPJ 00.000.000/0001-00" autocomplete="off"></div>
     </div>
   </div>
-
   <!-- ===== Cópia de segurança ===== -->
   <h2 class="h4 fw-bold mb-3">Cópia de segurança</h2>
   <div class="card card-body mb-4">
     <p class="text-secondary small mb-3">Baixa o conteúdo atual do painel (textos, fotos, informativos) num arquivo <code>conteudo.json</code>.</p>
     <div><button type="button" class="btn btn-outline-secondary" id="baixar">Baixar cópia de segurança</button></div>
     <div class="small text-secondary mt-2" id="jsonInfo"></div>
+  </div>
+  </div>
+
   </div>
 
   <div class="barra-acoes d-flex gap-2 flex-wrap align-items-center">

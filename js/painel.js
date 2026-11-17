@@ -536,6 +536,22 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     ADDAI.sairDaPrevia(); // voltar ao painel encerra a prévia
+
+    // abas: lembra a última aba aberta nesta sessão e mostra quantos itens cada lista tem
+    try {
+      var abaSalva = sessionStorage.getItem('addai_aba');
+      var botaoAba = abaSalva && document.querySelector('[data-aba="' + abaSalva + '"]');
+      if (botaoAba) bootstrap.Tab.getOrCreateInstance(botaoAba).show();
+    } catch (e) {}
+    document.querySelectorAll('[data-aba]').forEach(function (b) {
+      b.addEventListener('shown.bs.tab', function () { try { sessionStorage.setItem('addai_aba', b.getAttribute('data-aba')); } catch (e) {} });
+    });
+    document.querySelectorAll('[data-conta]').forEach(function (badge) {
+      var lista = $(badge.getAttribute('data-conta'));
+      var contar = function () { badge.textContent = lista.querySelectorAll(':scope > .info-card, :scope > .slide-card').length; };
+      new MutationObserver(contar).observe(lista, { childList: true });
+      contar();
+    });
     $('nomeRepo').textContent = GitHub.repositorio().split('/')[1];
 
     $('formLogin').addEventListener('submit', function (e) {
