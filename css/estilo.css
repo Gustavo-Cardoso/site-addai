@@ -58,6 +58,7 @@ h1,h2,h3,h4,.logo-text{font-family:'Nunito',system-ui,sans-serif}
 .mini-card{background:#fff;border:1px solid #e3eaf2;border-radius:14px;padding:16px 18px;height:100%}
 .mini-card h3{font-size:1.05rem;font-weight:800;margin-bottom:.2rem}
 .mini-card p{margin:0;color:#55677a;font-size:.95rem}
+.mini-card ul{margin:0;padding-left:1.1rem;color:#55677a;font-size:.95rem}
 
 /* cards pilares */
 .card{border:1px solid #e8eef5;border-radius:18px;box-shadow:0 10px 30px -16px rgba(16,36,59,.18)}

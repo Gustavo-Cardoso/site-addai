@@ -50,6 +50,11 @@ var ADDAI = (function () {
       bemvindoTexto: 'Somos uma associação sem fins lucrativos dedicada a acolher pessoas autistas e suas famílias, promovendo inclusão, informação e oportunidades.',
       sobreTitulo: 'Uma rede de apoio para a comunidade autista',
       sobreTexto: 'A ADDAI reúne famílias, profissionais e voluntários com um objetivo comum: construir uma sociedade mais acessível e acolhedora para pessoas autistas de todos os níveis de suporte.',
+      missao: 'Acolher, incluir e defender os direitos de pessoas autistas e suas famílias.',
+      visao: 'Ser referência em acolhimento e inclusão na nossa região.',
+      valores: '',           // um valor por linha; vazio = o cartão não aparece
+      sobreImg: '',          // foto de "Quem somos"; vazio = sem foto
+      sobreImgAlt: '',
       chamadaDoacao: 'Como você pode ajudar',
       // dados da associação (vazio = o site mostra o marcador amarelo)
       telefone: '',

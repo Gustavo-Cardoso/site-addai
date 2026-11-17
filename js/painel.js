@@ -6,7 +6,7 @@
    "Publicar no site" grava o conteudo.json direto no repositório.
    ===================================================================== */
 (function () {
-  var CAMPOS = ['navDoar', 'bemvindoTitulo', 'bemvindoTexto', 'sobreTitulo', 'sobreTexto', 'chamadaDoacao',
+  var CAMPOS = ['navDoar', 'bemvindoTitulo', 'bemvindoTexto', 'sobreTitulo', 'sobreTexto', 'missao', 'visao', 'valores', 'chamadaDoacao',
                 'telefone', 'email', 'endereco', 'pixChave', 'pixTitular', 'cnpj'];
   var CORES = [['slide-a', 'Azul'], ['slide-b', 'Verde'], ['slide-c', 'Laranja']];
   var LARGURA_SLIDE = 1920; // fotos maiores são reduzidas antes de embutir
@@ -48,6 +48,7 @@
       if (campo) campo.value = dados.textos[k] || '';
     });
     desenharSecoes();
+    desenharFotoSobre();
     desenharInformativos();
     desenharImpacto();
     desenharParceiros();
@@ -147,6 +148,24 @@
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     var titulo = card.querySelector('input:not([type=file]):not([type=checkbox])');
     if (titulo) { titulo.focus({ preventScroll: true }); titulo.select(); }
+  }
+
+  /* ---------- foto de "Quem somos" ---------- */
+  function desenharFotoSobre() {
+    var area = $('sobreFotoWrap');
+    area.innerHTML = '';
+    var item = { img: dados.textos.sobreImg || '' };
+    var foto = blocoFoto(item, {
+      dono: 'Quem somos', larguraMax: 1200, textoVazio: 'sem foto',
+      classeVazia: function () { return 'info-sem-foto'; },
+      redesenhar: function () { dados.textos.sobreImg = item.img; desenharFotoSobre(); }
+    });
+    foto.caminho.addEventListener('input', function () { dados.textos.sobreImg = item.img; });
+    foto.previa.style.height = '160px';
+    var alt = el('input', { 'class': 'form-control form-control-sm mb-2', placeholder: 'Descrição da foto (para leitores de tela)', 'aria-label': 'Descrição da foto — Quem somos' });
+    alt.value = dados.textos.sobreImgAlt || '';
+    alt.addEventListener('input', function () { dados.textos.sobreImgAlt = alt.value; });
+    [foto.previa, foto.arquivo, foto.caminho, alt, foto.tirar].forEach(function (n) { area.appendChild(n); });
   }
 
   /* ---------- seções personalizadas ---------- */

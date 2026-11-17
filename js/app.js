@@ -99,6 +99,41 @@
     }
   }
 
+  /* ---------- Quem somos ---------- */
+  function montarSobre(c) {
+    var tx = c.textos;
+    var temFoto = !!tx.sobreImg;
+    $('sobreFotoCol').classList.toggle('d-none', !temFoto);
+    $('sobreTextoCol').className = temFoto ? 'col-lg-6' : 'col-lg-9';
+    var foto = $('sobreFoto');
+    if (temFoto) { foto.src = tx.sobreImg; foto.alt = tx.sobreImgAlt || ''; } else { foto.removeAttribute('src'); }
+
+    Informativos.textoParaDom(tx.sobreTexto, $('sobreTexto'));
+
+    var cartoes = [['🎯 Missão', tx.missao, false], ['🌱 Visão', tx.visao, false], ['💙 Valores', tx.valores, true]]
+      .filter(function (x) { return String(x[1] || '').trim(); });
+    var grade = $('mvvGrid');
+    grade.innerHTML = '';
+    cartoes.forEach(function (x, i) {
+      var classe = cartoes.length === 1 ? 'col-12'
+        : cartoes.length === 2 ? 'col-sm-6'
+        : (temFoto ? (i === 2 ? 'col-12' : 'col-sm-6') : 'col-md-4');
+      var col = document.createElement('div'); col.className = classe;
+      var card = document.createElement('div'); card.className = 'mini-card';
+      var h = document.createElement('h3'); h.textContent = x[0]; card.appendChild(h);
+      var linhas = String(x[1]).split('\n').map(function (l) { return l.replace(/^[-•*]\s*/, '').trim(); }).filter(Boolean);
+      if (x[2] && linhas.length > 1) {          // valores: um por linha vira lista
+        var ul = document.createElement('ul');
+        linhas.forEach(function (l) { var li = document.createElement('li'); li.textContent = l; ul.appendChild(li); });
+        card.appendChild(ul);
+      } else {
+        var p = document.createElement('p'); p.textContent = linhas.join(' '); card.appendChild(p);
+      }
+      col.appendChild(card); grade.appendChild(col);
+    });
+    grade.classList.toggle('d-none', !cartoes.length);
+  }
+
   /* ---------- seções personalizadas (criadas no painel) ---------- */
   function montarExtras(c) {
     document.querySelectorAll('section[data-extra-secao]').forEach(function (s) { s.remove(); });
@@ -168,6 +203,7 @@
       ADDAI.aplicarTextos(c);
       montarCarrossel(c);
       Informativos.mostrarDestaques(c);
+      montarSobre(c);
       montarExtras(c);
       ADDAI.aplicarSecoes(c);
     });
