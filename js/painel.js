@@ -111,7 +111,7 @@
   /* Miniatura + escolher arquivo + caminho + tirar foto (usado em slides e informativos). */
   function blocoFoto(item, cfg) {
     var previa = el('div', { 'class': 'slide-prev mb-2' + (cfg.classeExtra || '') });
-    var tirar = botao('Tirar foto', 'btn-outline-secondary text-nowrap', 'Remover a foto — ' + cfg.dono, function () {
+    var tirar = botao('Remover imagem', 'btn-outline-secondary text-nowrap', 'Remover imagem — ' + cfg.dono, function () {
       item.img = ''; cfg.redesenhar();
     }, !item.img);
 
