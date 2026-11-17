@@ -48,6 +48,7 @@
       if (campo) campo.value = dados.textos[k] || '';
     });
     desenharMarca();
+    desenharRedes();
     desenharSecoes();
     desenharFotoSobre();
     desenharInformativos();
@@ -155,6 +156,55 @@
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     var titulo = card.querySelector('input:not([type=file]):not([type=checkbox])');
     if (titulo) { titulo.focus({ preventScroll: true }); titulo.select(); }
+  }
+
+  /* ---------- redes sociais ---------- */
+  function desenharRedes() {
+    var area = $('redesWrap');
+    area.innerHTML = '';
+    if (!dados.redes.length) {
+      area.appendChild(el('p', { 'class': 'text-secondary small mb-0', text: 'Nenhuma rede social cadastrada.' }));
+      return;
+    }
+    var total = dados.redes.length;
+    dados.redes.forEach(function (r, i) {
+      var dono = 'rede ' + (i + 1);
+      var tipo = el('select', { 'class': 'form-select form-select-sm', 'aria-label': 'Qual rede — ' + dono });
+      Object.keys(ADDAI.REDES).forEach(function (k) {
+        var o = el('option', { value: k, text: ADDAI.REDES[k][0] }); if (r.rede === k) o.selected = true; tipo.appendChild(o);
+      });
+      tipo.addEventListener('change', function () { r.rede = tipo.value; });
+
+      var link = campo(r, 'link', 'Link (https://…)', dono, 'form-control form-control-sm');
+      link.setAttribute('inputmode', 'url');
+      var aviso = el('div', { 'class': 'small text-danger mt-1 d-none', text: 'O link precisa começar com https://' });
+      var conferir = function () { aviso.classList.toggle('d-none', !r.link || /^https?:\/\//i.test(r.link.trim())); };
+      link.addEventListener('input', conferir); conferir();
+
+      var marcar = function (chave, rotulo) {
+        var id = 'rede' + chave + i;
+        var c = el('input', { type: 'checkbox', 'class': 'form-check-input', id: id });
+        c.checked = r[chave];
+        c.addEventListener('change', function () { r[chave] = c.checked; });
+        return el('div', { 'class': 'form-check form-check-inline mb-0' }, [c, el('label', { 'class': 'form-check-label small', 'for': id, text: rotulo })]);
+      };
+
+      area.appendChild(el('div', { 'class': 'item-linha p-2' }, [
+        el('div', { 'class': 'row g-2 align-items-center' }, [
+          el('div', { 'class': 'col-6 col-md-3' }, [tipo]),
+          el('div', { 'class': 'col-6 col-md-3' }, [campo(r, 'texto', 'Texto (ex.: @addai)', dono, 'form-control form-control-sm')]),
+          el('div', { 'class': 'col-12 col-md-6' }, [link, aviso])
+        ]),
+        el('div', { 'class': 'd-flex justify-content-between align-items-center mt-2 flex-wrap gap-2' }, [
+          el('div', {}, [marcar('topo', 'Topo do site'), marcar('rodape', 'Rodapé')]),
+          el('div', { 'class': 'btn-group' }, [
+            botao('↑', 'btn-outline-secondary', 'Mover ' + dono + ' para cima', function () { dados.redes.splice(i - 1, 0, dados.redes.splice(i, 1)[0]); desenharRedes(); }, i === 0),
+            botao('↓', 'btn-outline-secondary', 'Mover ' + dono + ' para baixo', function () { dados.redes.splice(i + 1, 0, dados.redes.splice(i, 1)[0]); desenharRedes(); }, i === total - 1),
+            botao('Remover', 'btn-outline-danger', 'Remover ' + dono, function () { dados.redes.splice(i, 1); desenharRedes(); })
+          ])
+        ])
+      ]));
+    });
   }
 
   /* ---------- logo e ícone ---------- */
@@ -613,6 +663,13 @@
         ladoImg: 'direita', botaoTexto: '', botaoLink: '', depoisDe: 'projetos', menu: false, menuNome: '' });
       desenharExtras();
       destacarNovo('extrasWrap');
+    });
+
+    $('addRede').addEventListener('click', function () {
+      dados.redes.unshift({ rede: 'facebook', link: '', texto: '', topo: true, rodape: true });
+      desenharRedes();
+      var primeiro = $('redesWrap').querySelector('select');
+      if (primeiro) primeiro.focus();
     });
 
     $('addImpacto').addEventListener('click', function () {

@@ -20,6 +20,18 @@ var ADDAI = (function () {
     ['parceiros', 'Parceiros']
   ];
 
+  // Redes sociais conhecidas: nome e ícone (traços, 24×24)
+  var REDES = {
+    instagram: ['Instagram', '<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/>'],
+    facebook: ['Facebook', '<path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7.5A1.5 1.5 0 0 1 13.5 6H15z"/>'],
+    whatsapp: ['WhatsApp', '<path d="M21 11.5a9 9 0 0 1-13.4 7.9L3 21l1.6-4.4A9 9 0 1 1 21 11.5z"/><path d="M8.5 8.5c0 3.5 3.5 7 7 7l1-1.6-2-1-1 .8c-1-.4-2.4-1.8-2.8-2.8l.8-1-1-2z"/>'],
+    youtube: ['YouTube', '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>'],
+    tiktok: ['TikTok', '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.6 2.4 4.4 5 4.6"/>'],
+    linkedin: ['LinkedIn', '<rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-7M11 13a2.5 2.5 0 0 1 5 0v4"/>'],
+    x: ['X (Twitter)', '<path d="M4 4l16 16M20 4 4 20"/>'],
+    site: ['Site', '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>']
+  };
+
   // Onde uma seção personalizada pode entrar (id da seção que vem antes dela)
   var POSICOES = [
     ['boasvindas', 'Boas-vindas'],
@@ -44,6 +56,10 @@ var ADDAI = (function () {
     parceiros: [],
     // seções criadas pelo painel
     extras: [],
+    // redes sociais: onde aparece cada uma (topo / rodapé); o cartão de contato mostra todas
+    redes: [
+      { rede: 'instagram', link: 'https://instagram.com/addaiautistas0425', texto: '@addaiautistas0425', topo: true, rodape: true }
+    ],
     // logo do topo e ícone da aba (vazios = símbolo padrão)
     marca: { logo: '', mostrarNome: true, favicon: '' },
     textos: {
@@ -99,6 +115,10 @@ var ADDAI = (function () {
     });
     saida.parceiros = clonar(Array.isArray(c.parceiros) ? c.parceiros : PADRAO.parceiros).map(function (x) {
       return { nome: String(x.nome || ''), link: String(x.link || ''), logo: String(x.logo || '') };
+    });
+    saida.redes = clonar(Array.isArray(c.redes) ? c.redes : PADRAO.redes).map(function (r) {
+      return { rede: REDES[r.rede] ? r.rede : 'site', link: String(r.link || ''), texto: String(r.texto || ''),
+               topo: r.topo !== false, rodape: r.rodape !== false };
     });
     var mc = c.marca || {};
     saida.marca = { logo: String(mc.logo || ''), mostrarNome: mc.mostrarNome !== false, favicon: String(mc.favicon || '') };
@@ -288,7 +308,53 @@ var ADDAI = (function () {
     });
   }
 
+  /* ---------- redes sociais ---------- */
+  function icone(rede, classe) {
+    var span = document.createElement('span');
+    span.innerHTML = '<svg class="' + classe + '" viewBox="0 0 24 24" aria-hidden="true">' + (REDES[rede] || REDES.site)[1] + '</svg>'; // ícones fixos, não vêm do conteúdo
+    return span.firstChild;
+  }
+  function linkRede(r, comTexto, classe) {
+    var a = document.createElement('a');
+    a.href = r.link.trim(); a.target = '_blank'; a.rel = 'noopener';
+    if (classe) a.className = classe;
+    var nome = (REDES[r.rede] || REDES.site)[0];
+    a.appendChild(icone(r.rede, 'ico'));
+    var txt = document.createElement('span');
+    txt.textContent = r.texto || nome;
+    if (!comTexto) { txt.className = 'visually-hidden'; a.title = r.texto || nome; }
+    a.appendChild(txt);
+    return a;
+  }
+  function aplicarRedes(c) {
+    var validas = c.redes.filter(function (r) { return linkSeguro(r.link); });
+    var topo = document.getElementById('redesTopo');
+    if (topo) {
+      topo.innerHTML = '';
+      var noTopo = validas.filter(function (r) { return r.topo; });
+      noTopo.forEach(function (r) { topo.appendChild(linkRede(r, noTopo.length <= 2, 'text-white text-decoration-none')); });
+    }
+    var rodape = document.getElementById('redesRodape');
+    if (rodape) {
+      rodape.innerHTML = '';
+      var noRodape = validas.filter(function (r) { return r.rodape; });
+      noRodape.forEach(function (r) {
+        var li = document.createElement('li');
+        li.appendChild(linkRede(r, true));
+        rodape.appendChild(li);
+      });
+      mostrar(document.getElementById('redesRodapeCol'), noRodape.length > 0);
+    }
+    var contato = document.getElementById('redesContato');
+    if (contato) {
+      contato.innerHTML = '';
+      validas.forEach(function (r) { contato.appendChild(linkRede(r, true)); });
+      mostrar(document.getElementById('redesContatoCol'), validas.length > 0);
+    }
+  }
+
   function aplicarSecoes(c) {
+    aplicarRedes(c);
     linksExtras(c);
     var visivel = {
       sobre: c.secoes.sobre,
@@ -317,6 +383,7 @@ var ADDAI = (function () {
   return {
     PADRAO: PADRAO,
     SECOES: SECOES,
+    REDES: REDES,
     POSICOES: POSICOES,
     aplicarSecoes: aplicarSecoes,
     clonar: clonar,

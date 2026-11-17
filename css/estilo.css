@@ -116,6 +116,11 @@ footer a:hover{color:#fff}
 .info-texto{font-size:1.08rem;line-height:1.75;overflow-wrap:anywhere}
 .info-voltar{font-weight:600;text-decoration:none}
 
+/* redes sociais */
+.redes-rodape a,.redes-contato a{display:inline-flex;align-items:center;gap:.1rem}
+.redes-contato{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+#redesTopo .ico{margin-right:.3rem;width:1.15em;height:1.15em}
+
 /* seções personalizadas */
 .img-extra{width:100%;border-radius:18px;box-shadow:0 20px 50px -24px rgba(16,36,59,.35)}
 .texto-extra{font-size:1.05rem;line-height:1.75;overflow-wrap:anywhere}
