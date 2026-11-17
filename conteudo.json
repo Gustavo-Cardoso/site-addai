@@ -3,8 +3,8 @@
     "sobre": true,
     "informativos": true,
     "projetos": true,
-    "impacto": false,
-    "parceiros": false
+    "impacto": true,
+    "parceiros": true
   },
   "impacto": [
     {
