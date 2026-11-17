@@ -2,8 +2,8 @@
    painel.js — painel de controle (informativos, carrossel, textos, dados)
    (depende de js/conteudo-padrao.js e do Bootstrap)
 
-   O painel NÃO publica nada sozinho: ele monta o conteudo.json.
-   Só quem tem acesso ao repositório no GitHub consegue publicar.
+   O painel só abre com uma chave de acesso do GitHub (js/github.js).
+   "Publicar no site" grava o conteudo.json direto no repositório.
    ===================================================================== */
 (function () {
   var CAMPOS = ['navDoar', 'bemvindoTitulo', 'bemvindoTexto', 'sobreTitulo', 'sobreTexto', 'chamadaDoacao',
@@ -40,7 +40,7 @@
     return d.getFullYear() + '-' + dois(d.getMonth() + 1) + '-' + dois(d.getDate());
   }
 
-  /* ---------- formulário <-> modelo ---------- */
+  /* ---------- campos <-> modelo ---------- */
   function preencher() {
     CAMPOS.forEach(function (k) {
       var campo = $('t_' + k);
@@ -300,34 +300,32 @@
   }
 
   /* ---------- publicar ---------- */
-  function gerar() {
+  function tamanhoKb(texto) { return Math.max(1, Math.round(new Blob([texto]).size / 1024)); }
+
+  function baixarCopia() {
     coletar();
-    var texto = JSON.stringify(dados, null, 2);
-    $('jsonOut').value = texto;
-    var kb = Math.max(1, Math.round(texto.length / 1024));
-    $('jsonInfo').textContent = 'Tamanho do arquivo: ' + kb + ' KB' +
+    var texto = JSON.stringify(dados, null, 2) + '\n';
+    var kb = tamanhoKb(texto);
+    $('jsonInfo').textContent = 'Tamanho: ' + kb + ' KB' +
       (kb > 900 ? ' — está grande. Para ficar leve, suba as fotos na pasta img/ do repositório e use o caminho (img/foto.jpg).' : '');
-    return texto;
+    try {
+      var link = el('a', { href: URL.createObjectURL(new Blob([texto], { type: 'application/json' })), download: 'conteudo-' + hoje() + '.json' });
+      document.body.appendChild(link); link.click(); link.remove();
+    } catch (e) { aviso('Não consegui baixar o arquivo neste navegador.', 'warning'); }
   }
 
-  function copiar(texto) {
-    var ok = function () { aviso('Copiado! Agora cole no conteudo.json do repositório.'); };
-    var reserva = function () {
-      var area = $('jsonOut');
-      area.focus(); area.select();
-      try { document.execCommand('copy'); ok(); }
-      catch (e) { aviso('Selecione o texto da caixa e copie com Ctrl+C.', 'warning'); }
-    };
-    try { navigator.clipboard.writeText(texto).then(ok).catch(reserva); } catch (e) { reserva(); }
-  }
-
-  /* No GitHub Pages dá para descobrir o repositório pelo endereço do site. */
-  function repositorioGitHub() {
-    var m = /^([^.]+)\.github\.io$/i.exec(location.hostname);
-    if (!m) return null;
-    var partes = location.pathname.split('/').filter(Boolean);
-    var repo = (partes.length && !/\.html?$/i.test(partes[0])) ? partes[0] : location.hostname;
-    return m[1] + '/' + repo;
+  function publicar(mensagem) {
+    coletar();
+    var botao = $('publicar');
+    botao.disabled = true; botao.textContent = 'Publicando…';
+    return GitHub.publicar(dados, mensagem).then(function () {
+      ADDAI.apagarRascunho();
+      $('avisoRascunho').classList.add('d-none');
+      aviso('Publicado! O site atualiza para todos em cerca de 1 minuto.');
+    }).catch(function (e) {
+      if (e.status === 401) { sairDoPainel(); }
+      aviso(e.message, 'danger');
+    }).then(function () { botao.disabled = false; botao.textContent = 'Publicar no site'; });
   }
 
   function salvar() {
@@ -343,18 +341,63 @@
   }
 
   /* ---------- ligações ---------- */
-  document.addEventListener('DOMContentLoaded', function () {
-    ADDAI.sairDaPrevia(); // voltar ao painel encerra a prévia
+  /* ---------- login ---------- */
+  function mostrarLogin(msg) {
+    $('areaPainel').classList.add('d-none');
+    $('telaLogin').classList.remove('d-none');
+    $('usuario').classList.add('d-none');
+    $('sair').classList.add('d-none');
+    var caixa = $('erroLogin');
+    caixa.textContent = msg || '';
+    caixa.classList.toggle('d-none', !msg);
+  }
+
+  function sairDoPainel() { GitHub.sair(); mostrarLogin(); }
+
+  /* Depois do login: mostra o painel e carrega o conteúdo do repositório. */
+  function abrirPainel(info) {
+    $('telaLogin').classList.add('d-none');
+    $('areaPainel').classList.remove('d-none');
+    if (info.usuario) { $('usuario').textContent = 'Conectado como ' + info.usuario; $('usuario').classList.remove('d-none'); }
+    $('sair').classList.remove('d-none');
 
     var rascunho = ADDAI.lerRascunho();
-    if (rascunho) {
-      dados = ADDAI.completar(rascunho);
-      $('avisoRascunho').classList.remove('d-none');
+    return GitHub.carregar().then(function (c) {
+      if (rascunho) {
+        dados = ADDAI.completar(rascunho);
+        $('avisoRascunho').classList.remove('d-none');
+      } else {
+        dados = ADDAI.completar(c);
+      }
       preencher();
-    } else {
-      preencher(); // mostra o padrão na hora…
-      ADDAI.carregarPublicado().then(function (c) { dados = c; preencher(); }); // …e troca pelo publicado
-    }
+    }).catch(function (e) {
+      if (e.status === 401) { sairDoPainel(); mostrarLogin(e.message); return; }
+      aviso(e.message, 'danger');
+    });
+  }
+
+  function entrar(chave, lembrar) {
+    var botao = $('btnEntrar');
+    botao.disabled = true; botao.textContent = 'Entrando…';
+    return GitHub.entrar(chave, lembrar)
+      .then(abrirPainel)
+      .catch(function (e) { mostrarLogin(e.message); })
+      .then(function () { botao.disabled = false; botao.textContent = 'Entrar'; });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    ADDAI.sairDaPrevia(); // voltar ao painel encerra a prévia
+    $('nomeRepo').textContent = GitHub.repositorio().split('/')[1];
+
+    $('formLogin').addEventListener('submit', function (e) {
+      e.preventDefault();
+      entrar($('token').value, $('lembrar').checked).then(function () { $('token').value = ''; });
+    });
+    $('sair').addEventListener('click', function () { sairDoPainel(); aviso('Você saiu do painel.', 'secondary'); });
+
+    var salvo = GitHub.lerTokenSalvo();
+    if (salvo) entrar(salvo, !!(function () { try { return localStorage.getItem('addai_github_token'); } catch (e) { return null; } })());
+    else mostrarLogin();
 
     $('addInfo').addEventListener('click', function () {
       dados.informativos.unshift({ id: 'i' + Date.now().toString(36), titulo: 'Novo informativo', data: hoje(), img: '', imgAlt: '', texto: '' });
@@ -391,23 +434,15 @@
       window.location.href = 'index.html#previa';
     });
 
-    $('gerar').addEventListener('click', function () { copiar(gerar()); });
+    $('baixar').addEventListener('click', baixarCopia);
 
-    $('baixar').addEventListener('click', function () {
-      var texto = gerar();
-      try {
-        var link = el('a', { href: URL.createObjectURL(new Blob([texto], { type: 'application/json' })), download: 'conteudo.json' });
-        document.body.appendChild(link); link.click(); link.remove();
-        aviso('Se o download não começar, use o botão "Gerar e copiar".', 'secondary');
-      } catch (e) { aviso('Download indisponível aqui — use "Gerar e copiar".', 'warning'); }
+    var modalPublicar = new bootstrap.Modal($('modalPublicar'));
+    $('publicar').addEventListener('click', function () { $('msgPublicar').value = ''; modalPublicar.show(); });
+    $('confirmarPublicar').addEventListener('click', function () {
+      var msg = $('msgPublicar').value.trim();
+      modalPublicar.hide();
+      publicar(msg ? msg + ' (painel)' : 'Atualiza conteúdo pelo painel');
     });
-
-    var repo = repositorioGitHub();
-    if (repo) {
-      var abrir = $('abrirGitHub');
-      abrir.href = 'https://github.com/' + repo + '/edit/main/conteudo.json';
-      abrir.classList.remove('d-none');
-    }
 
     // descartar rascunho (confirmação em janela do próprio painel)
     var modal = new bootstrap.Modal($('modalDescartar'));
@@ -416,10 +451,9 @@
       ADDAI.apagarRascunho();
       modal.hide();
       $('avisoRascunho').classList.add('d-none');
-      $('jsonOut').value = '';
       $('jsonInfo').textContent = '';
-      ADDAI.carregarPublicado().then(function (c) {
-        dados = c; preencher();
+      GitHub.carregar().then(function (c) {
+        dados = ADDAI.completar(c); preencher();
         aviso('Rascunho descartado. Mostrando o conteúdo publicado.', 'secondary');
       });
     });

@@ -17,20 +17,54 @@
 <header class="painel-topo py-3 mb-4">
   <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
     <strong class="logo-text text-white">⚙ Painel ADDAI</strong>
-    <a href="index.html" class="btn btn-outline-light btn-sm">← Voltar ao site</a>
+    <div class="d-flex align-items-center gap-2">
+      <span class="small opacity-75 d-none" id="usuario"></span>
+      <button type="button" class="btn btn-outline-light btn-sm d-none" id="sair">Sair</button>
+      <a href="index.html" class="btn btn-outline-light btn-sm">← Voltar ao site</a>
+    </div>
   </div>
 </header>
 
 <main class="container pb-5 painel-corpo">
 
+  <!-- ===== Login ===== -->
+  <section id="telaLogin" class="login-caixa mx-auto">
+    <div class="card card-body p-4">
+      <h1 class="h4 fw-bold mb-1">Entrar no painel</h1>
+      <p class="text-secondary small">Use a sua chave de acesso do GitHub. Só quem tem uma chave com permissão neste repositório consegue editar o site.</p>
+      <form id="formLogin" novalidate>
+        <label class="form-label" for="token">Chave de acesso</label>
+        <input type="password" class="form-control mb-2" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="lembrar">
+          <label class="form-check-label small" for="lembrar">Manter conectado neste computador (não marque em computador compartilhado)</label>
+        </div>
+        <div class="alert alert-danger py-2 small d-none" id="erroLogin" role="alert"></div>
+        <button type="submit" class="btn btn-marca w-100" id="btnEntrar">Entrar</button>
+      </form>
+      <details class="small text-secondary mt-4">
+        <summary class="fw-semibold">Como conseguir a chave (uma vez só)</summary>
+        <ol class="mt-2 mb-0 ps-3">
+          <li>Entre no GitHub e abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+          <li><strong>Token name:</strong> "Painel ADDAI". <strong>Expiration:</strong> escolha uma data (ex.: 1 ano).</li>
+          <li><strong>Repository access:</strong> "Only select repositories" → escolha <code id="nomeRepo">site-addai</code>.</li>
+          <li><strong>Permissions → Repository permissions → Contents:</strong> "Read and write".</li>
+          <li>Clique em <strong>Generate token</strong>, copie a chave e cole aqui. Guarde-a num lugar seguro: o GitHub só mostra uma vez.</li>
+        </ol>
+        <p class="mt-2 mb-0">Para dar acesso a outra pessoa, adicione-a como colaboradora do repositório (Settings → Collaborators) e ela gera a própria chave. Nunca compartilhe a sua.</p>
+      </details>
+    </div>
+  </section>
+
+  <div id="areaPainel" class="d-none">
+
   <div class="alert alert-info">
     <strong>Como funciona:</strong> edite, clique em <em>Ver prévia</em> para conferir e depois em
-    <em>Gerar e copiar</em>. Cole o resultado no arquivo <code>conteudo.json</code> do repositório no GitHub —
-    em cerca de 1 minuto o site atualiza para todos. Nada do que você faz aqui vai ao ar sozinho.
+    <em>Publicar no site</em>. Em cerca de 1 minuto o site atualiza para todos.
   </div>
 
   <div class="alert alert-warning d-none" id="avisoRascunho" role="status">
-    Você tem um <strong>rascunho</strong> salvo neste navegador. Ele só aparece na prévia — os visitantes continuam vendo o conteúdo publicado.
+    Você tem um <strong>rascunho</strong> não publicado neste navegador. Ele só aparece na prévia — os visitantes continuam vendo o conteúdo publicado até você clicar em <em>Publicar no site</em>.
   </div>
 
   <!-- ===== Seções ===== -->
@@ -96,30 +130,39 @@
     </div>
   </div>
 
-  <!-- ===== Publicar ===== -->
-  <h2 class="h4 fw-bold mb-3">Publicar</h2>
+  <!-- ===== Cópia de segurança ===== -->
+  <h2 class="h4 fw-bold mb-3">Cópia de segurança</h2>
   <div class="card card-body mb-4">
-    <ol class="text-secondary small ps-3">
-      <li>Clique em <strong>Gerar e copiar</strong>.</li>
-      <li>No GitHub, abra o arquivo <code>conteudo.json</code>, clique no lápis ✏️, apague tudo e cole.</li>
-      <li>Clique em <strong>Commit changes</strong>. Pronto.</li>
-    </ol>
-    <div class="d-flex gap-2 flex-wrap mb-3">
-      <button type="button" class="btn btn-primary" id="gerar">Gerar e copiar conteudo.json</button>
-      <a class="btn btn-dark d-none" id="abrirGitHub" target="_blank" rel="noopener" href="#">Abrir conteudo.json no GitHub ↗</a>
-      <button type="button" class="btn btn-outline-secondary" id="baixar">Baixar arquivo</button>
-    </div>
-    <label class="visually-hidden" for="jsonOut">Conteúdo gerado</label>
-    <textarea class="form-control" id="jsonOut" readonly placeholder="O conteúdo gerado aparece aqui…"></textarea>
+    <p class="text-secondary small mb-3">Baixa o conteúdo atual do painel (textos, fotos, informativos) num arquivo <code>conteudo.json</code>.</p>
+    <div><button type="button" class="btn btn-outline-secondary" id="baixar">Baixar cópia de segurança</button></div>
     <div class="small text-secondary mt-2" id="jsonInfo"></div>
   </div>
 
-  <div class="barra-acoes d-flex gap-2 flex-wrap">
-    <button type="button" class="btn btn-marca" id="salvar">Salvar rascunho</button>
+  <div class="barra-acoes d-flex gap-2 flex-wrap align-items-center">
+    <button type="button" class="btn btn-primary" id="publicar">Publicar no site</button>
     <button type="button" class="btn btn-success" id="previa">Ver prévia</button>
+    <button type="button" class="btn btn-outline-secondary" id="salvar">Salvar rascunho</button>
     <button type="button" class="btn btn-outline-danger ms-auto" id="descartar">Descartar rascunho</button>
   </div>
+  </div>
 </main>
+
+<!-- confirmação de publicação -->
+<div class="modal fade" id="modalPublicar" tabindex="-1" aria-labelledby="tituloPublicar" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header"><h2 class="modal-title h5" id="tituloPublicar">Publicar no site?</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+    <div class="modal-body">
+      <p>As alterações ficam visíveis para todos os visitantes em cerca de 1 minuto.</p>
+      <label class="form-label small" for="msgPublicar">Resumo da alteração (opcional)</label>
+      <input class="form-control" id="msgPublicar" placeholder="Ex.: novo informativo sobre a festa">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="confirmarPublicar">Publicar</button>
+    </div>
+  </div></div>
+</div>
 
 <!-- confirmação de descarte -->
 <div class="modal fade" id="modalDescartar" tabindex="-1" aria-labelledby="tituloDescartar" aria-hidden="true">
@@ -145,6 +188,7 @@
 
 <script src="vendor/bootstrap.bundle.min.js"></script>
 <script src="js/conteudo-padrao.js"></script>
+<script src="js/github.js"></script>
 <script src="js/painel.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ Site institucional da **ADDAI**, associação sem fins lucrativos de acolhimento
 - Site responsivo (celular, tablet e computador)
 - Carrossel de imagens com botão de pausar
 - **Informativos:** os 4 mais recentes na página inicial e uma página com a lista completa e a leitura de cada um
-- Painel de controle (`painel.html`) para ligar/desligar seções e editar informativos, parceiros, números de impacto, slides, textos e dados da associação — sem mexer no código
+- Painel de controle (`painel.html`) com login pelo GitHub para ligar/desligar seções e editar informativos, parceiros, números de impacto, slides, textos e dados da associação — sem mexer no código
 - Doação por PIX com botão de copiar a chave
 - Cuidados de acessibilidade: navegação por teclado, foco visível, respeito à preferência de menos movimento
 
@@ -33,6 +33,7 @@ site-addai/
 ├── js/
 │   ├── conteudo-padrao.js  conteúdo padrão, leitura do conteudo.json e prévia
 │   ├── informativos.js     seção e página de informativos
+│   ├── github.js           login do painel e publicação no repositório
 │   ├── app.js              página inicial (carrossel, PIX)
 │   └── painel.js           painel de controle
 ├── vendor/                 Bootstrap (css + js)
@@ -48,13 +49,26 @@ O site lê o `conteudo.json`, e o navegador só permite isso por um servidor loc
 
 ## Editar o conteúdo
 
-1. Abra o painel: `painel.html` (no site publicado: `.../site-addai/painel.html`).
-2. Edite e clique em **Ver prévia** para conferir (a prévia fica só no seu navegador).
-3. Clique em **Gerar e copiar conteudo.json**.
-4. No GitHub, abra `conteudo.json` → ✏️ → apague tudo, cole → **Commit changes**.
-5. Em cerca de 1 minuto o site atualiza para todos.
+O painel fica em `painel.html` (no site publicado: `.../site-addai/painel.html`) e pede login.
 
-O painel não publica nada sozinho: qualquer pessoa pode abri-lo, mas só quem tem acesso a este repositório consegue alterar o site.
+### Login (chave de acesso do GitHub)
+
+O painel não tem senha própria: ele usa uma chave do GitHub com permissão só neste repositório. Sem a chave, ninguém abre o painel nem altera o site.
+
+1. Abra [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new).
+2. **Token name:** "Painel ADDAI" · **Expiration:** escolha uma data (ex.: 1 ano).
+3. **Repository access:** *Only select repositories* → `site-addai`.
+4. **Permissions → Repository permissions → Contents:** *Read and write*.
+5. **Generate token**, copie e cole no painel. Guarde num lugar seguro (o GitHub só mostra uma vez).
+
+Para dar acesso a outra pessoa: **Settings → Collaborators** no repositório; ela gera a própria chave. Quando a chave expirar, gere outra do mesmo jeito.
+
+### Publicar
+
+1. Edite e clique em **Ver prévia** para conferir (a prévia fica só no seu navegador).
+2. Clique em **Publicar no site**. Em cerca de 1 minuto o site atualiza para todos.
+
+Cada publicação fica registrada no histórico do repositório (aba *Commits*), e dá para voltar a uma versão anterior por lá.
 
 ### Seções
 
