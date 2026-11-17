@@ -9,7 +9,8 @@
   var CAMPOS = ['navDoar', 'bemvindoTitulo', 'bemvindoTexto', 'sobreTitulo', 'sobreTexto', 'chamadaDoacao',
                 'telefone', 'email', 'endereco', 'pixChave', 'pixTitular', 'cnpj'];
   var CORES = [['slide-a', 'Azul'], ['slide-b', 'Verde'], ['slide-c', 'Laranja']];
-  var LARGURA_SLIDE = 1600; // fotos maiores são reduzidas antes de embutir
+  var LARGURA_SLIDE = 1920; // fotos maiores são reduzidas antes de embutir
+  var LARGURA_SLIDE_CEL = 900;
   var LARGURA_INFO = 1000;
 
   var dados = ADDAI.completar(null);
@@ -273,6 +274,7 @@
       var colTextos = el('div', { 'class': 'col-md-7' }, [
         campo(s, 'titulo', 'Título', dono),
         campo(s, 'subtitulo', 'Subtítulo', dono),
+        el('p', { 'class': 'small text-secondary mb-2', text: 'Se a imagem já tem texto, deixe título e subtítulo vazios.' }),
         el('div', { 'class': 'row g-2' }, [
           el('div', { 'class': 'col-6' }, [campo(s, 'botaoTexto', 'Texto do botão', dono)]),
           el('div', { 'class': 'col-6' }, [campo(s, 'botaoLink', 'Link (ex.: #ajudar)', dono)])
@@ -293,7 +295,41 @@
       });
       cor.addEventListener('change', function () { s.cor = cor.value; foto.pintar(); });
 
-      var colFoto = el('div', { 'class': 'col-md-5' }, [foto.previa, foto.arquivo, foto.caminho, el('div', { 'class': 'd-flex gap-2' }, [cor, foto.tirar])]);
+      // como mostrar a foto
+      var ajuste = el('select', { 'class': 'form-select form-select-sm mt-2', 'aria-label': 'Como mostrar a foto — ' + dono });
+      [['cobrir', 'Preencher a área (pode cortar as bordas)'], ['inteira', 'Imagem inteira, sem cortar (banner com texto)']].forEach(function (o) {
+        var op = el('option', { value: o[0], text: o[1] });
+        if ((s.ajuste || 'cobrir') === o[0]) op.selected = true;
+        ajuste.appendChild(op);
+      });
+      ajuste.addEventListener('change', function () { s.ajuste = ajuste.value; desenharSlides(); });
+      if (s.ajuste === 'inteira') foto.previa.style.backgroundSize = 'contain';
+
+      // foto alternativa para celular
+      var cel = { img: s.imgCelular || '' };
+      var fotoCel = blocoFoto(cel, {
+        dono: dono + ' (celular)', larguraMax: LARGURA_SLIDE_CEL, textoVazio: 'usa a mesma foto',
+        classeVazia: function () { return 'info-sem-foto'; },
+        redesenhar: function () { s.imgCelular = cel.img; desenharSlides(); }
+      });
+      fotoCel.caminho.addEventListener('input', function () { s.imgCelular = cel.img; });
+      if (s.ajuste === 'inteira') fotoCel.previa.style.backgroundSize = 'contain';
+      var abrirCel = !!s.imgCelular;
+      var detalhesCel = el('details', { 'class': 'mt-2 small' }, [
+        el('summary', { 'class': 'text-secondary', text: 'Foto diferente para celular (opcional)' }),
+        el('div', { 'class': 'mt-2' }, [
+          el('p', { 'class': 'text-secondary mb-2', text: 'Use uma versão em pé (vertical) da arte, para não ficar pequena ou cortada no celular.' }),
+          fotoCel.previa, fotoCel.arquivo, fotoCel.caminho, fotoCel.tirar
+        ])
+      ]);
+      if (abrirCel) detalhesCel.open = true;
+
+      var colFoto = el('div', { 'class': 'col-md-5' }, [
+        foto.previa, foto.arquivo, foto.caminho, el('div', { 'class': 'd-flex gap-2' }, [cor, foto.tirar]),
+        ajuste,
+        campo(s, 'imgAlt', 'Descrição da imagem (para leitores de tela)', dono, 'form-control form-control-sm mt-2'),
+        detalhesCel
+      ]);
 
       area.appendChild(el('div', { 'class': 'slide-card p-3' }, [cabecalho, el('div', { 'class': 'row g-3' }, [colTextos, colFoto])]));
     });

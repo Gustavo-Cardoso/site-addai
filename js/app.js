@@ -26,24 +26,54 @@
       var item = document.createElement('div');
       item.className = 'carousel-item' + (i === 0 ? ' active' : '');
 
+      var inteira = s.ajuste === 'inteira' && !!s.img;
       var fundo = document.createElement('div');
-      fundo.className = 'slide-bg ' + (s.cor || 'slide-a');
-      if (s.img) fundo.style.backgroundImage = 'url("' + String(s.img).replace(/"/g, '%22') + '")';
 
-      var legenda = document.createElement('div');
-      legenda.className = 'carousel-caption';
-      var h = document.createElement('h2'); h.textContent = s.titulo || '';
-      var p = document.createElement('p'); p.textContent = s.subtitulo || '';
-      legenda.appendChild(h);
-      legenda.appendChild(p);
-      if (s.botaoTexto) {
-        var a = document.createElement('a');
-        a.className = 'btn btn-marca btn-lg mt-2';
-        a.href = s.botaoLink || '#ajudar';
-        a.textContent = s.botaoTexto;
-        legenda.appendChild(a);
+      if (inteira) {
+        // Banner: mostra a imagem inteira, sem cortar (bom para artes com texto).
+        fundo.className = 'slide-inteira';
+        var pic = document.createElement('picture');
+        if (s.imgCelular) {
+          var fonte = document.createElement('source');
+          fonte.media = '(max-width: 767.98px)';
+          fonte.srcset = s.imgCelular;
+          pic.appendChild(fonte);
+        }
+        var foto = document.createElement('img');
+        foto.className = 'slide-banner';
+        foto.src = s.img;
+        foto.alt = s.imgAlt || s.titulo || '';
+        if (i > 0) foto.loading = 'lazy';
+        pic.appendChild(foto);
+        fundo.appendChild(pic);
+      } else {
+        // Foto de fundo preenchendo a área (pode cortar as bordas) ou cor.
+        fundo.className = 'slide-bg ' + (s.cor || 'slide-a');
+        if (s.img) {
+          fundo.style.backgroundImage = 'url("' + String(s.img).replace(/"/g, '%22') + '")';
+          if (s.imgAlt) { fundo.setAttribute('role', 'img'); fundo.setAttribute('aria-label', s.imgAlt); }
+        }
+        if (s.imgCelular) {
+          fundo.classList.add('tem-celular');
+          fundo.style.setProperty('--img-celular', 'url("' + String(s.imgCelular).replace(/"/g, '%22') + '")');
+        }
       }
-      fundo.appendChild(legenda);
+
+      // Legenda só quando há texto ou botão (banners com texto na arte ficam limpos).
+      if (s.titulo || s.subtitulo || s.botaoTexto) {
+        var legenda = document.createElement('div');
+        legenda.className = 'carousel-caption';
+        if (s.titulo) { var h = document.createElement('h2'); h.textContent = s.titulo; legenda.appendChild(h); }
+        if (s.subtitulo) { var p = document.createElement('p'); p.textContent = s.subtitulo; legenda.appendChild(p); }
+        if (s.botaoTexto) {
+          var a = document.createElement('a');
+          a.className = 'btn btn-marca btn-lg mt-2';
+          a.href = s.botaoLink || '#ajudar';
+          a.textContent = s.botaoTexto;
+          legenda.appendChild(a);
+        }
+        fundo.appendChild(legenda);
+      }
       item.appendChild(fundo);
       inner.appendChild(item);
     });
