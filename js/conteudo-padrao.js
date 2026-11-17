@@ -44,6 +44,8 @@ var ADDAI = (function () {
     parceiros: [],
     // seções criadas pelo painel
     extras: [],
+    // logo do topo e ícone da aba (vazios = símbolo padrão)
+    marca: { logo: '', mostrarNome: true, favicon: '' },
     textos: {
       navDoar: 'Doe agora',
       bemvindoTitulo: 'Bem-vindo à ADDAI',
@@ -98,6 +100,8 @@ var ADDAI = (function () {
     saida.parceiros = clonar(Array.isArray(c.parceiros) ? c.parceiros : PADRAO.parceiros).map(function (x) {
       return { nome: String(x.nome || ''), link: String(x.link || ''), logo: String(x.logo || '') };
     });
+    var mc = c.marca || {};
+    saida.marca = { logo: String(mc.logo || ''), mostrarNome: mc.mostrarNome !== false, favicon: String(mc.favicon || '') };
     saida.extras = clonar(Array.isArray(c.extras) ? c.extras : []).map(function (x, i) {
       return {
         id: String(x.id || ('s' + (i + 1))).replace(/[^a-z0-9-]/gi, '') || ('s' + (i + 1)),
@@ -182,7 +186,24 @@ var ADDAI = (function () {
 
   /* Preenche todo elemento que tem data-key="chave".
      Valor vazio = mantém o marcador amarelo que está no HTML. */
+  /* Logo da barra de navegação e ícone da aba (favicon). */
+  function aplicarMarca(c) {
+    var m = c.marca || {};
+    document.querySelectorAll('.navbar-brand').forEach(function (a) {
+      var img = a.querySelector('.logo-img'), simbolo = a.querySelector('.logo-simbolo'), nome = a.querySelector('.logo-text');
+      if (!img) return;
+      var temLogo = !!m.logo;
+      img.classList.toggle('d-none', !temLogo);
+      if (temLogo) { img.src = m.logo; img.alt = m.mostrarNome ? '' : 'ADDAI'; } else { img.removeAttribute('src'); }
+      if (simbolo) simbolo.classList.toggle('logo-oculto', temLogo); // fica no DOM: o rodapé usa o degradê dele
+      if (nome) nome.classList.toggle('d-none', temLogo && !m.mostrarNome);
+    });
+    var icone = document.getElementById('favicon');
+    if (icone && m.favicon) { icone.href = m.favicon; icone.type = 'image/png'; }
+  }
+
   function aplicarTextos(c) {
+    aplicarMarca(c);
     document.querySelectorAll('[data-key]').forEach(function (el) {
       var chave = el.getAttribute('data-key');
       var valor = c.textos[chave];
@@ -307,6 +328,7 @@ var ADDAI = (function () {
     sairDaPrevia: sairDaPrevia,
     carregarPublicado: carregarPublicado,
     carregar: carregar,
-    aplicarTextos: aplicarTextos
+    aplicarTextos: aplicarTextos,
+    aplicarMarca: aplicarMarca
   };
 })();

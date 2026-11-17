@@ -47,6 +47,7 @@
       var campo = $('t_' + k);
       if (campo) campo.value = dados.textos[k] || '';
     });
+    desenharMarca();
     desenharSecoes();
     desenharFotoSobre();
     desenharInformativos();
@@ -82,7 +83,7 @@
   function ehEmbutida(img) { return !!img && img.indexOf('data:') === 0; }
 
   /* Reduz e comprime a foto no próprio navegador (nada é enviado a servidor). */
-  function comprimirFoto(arquivo, larguraMax, pronto, formato) {
+  function comprimirFoto(arquivo, larguraMax, pronto, formato, quadrado) {
     var leitor = new FileReader();
     leitor.onerror = function () { pronto(null); };
     leitor.onload = function () {
@@ -90,10 +91,16 @@
       img.onerror = function () { pronto(null); };
       img.onload = function () {
         var w = img.naturalWidth, h = img.naturalHeight;
-        if (w > larguraMax) { h = Math.round(h * larguraMax / w); w = larguraMax; }
         var tela = document.createElement('canvas');
-        tela.width = w; tela.height = h;
-        tela.getContext('2d').drawImage(img, 0, 0, w, h);
+        if (quadrado) {                       // ícone: recorta o centro em quadrado
+          var lado = Math.min(w, h);
+          tela.width = tela.height = quadrado;
+          tela.getContext('2d').drawImage(img, (w - lado) / 2, (h - lado) / 2, lado, lado, 0, 0, quadrado, quadrado);
+        } else {
+          if (w > larguraMax) { h = Math.round(h * larguraMax / w); w = larguraMax; }
+          tela.width = w; tela.height = h;
+          tela.getContext('2d').drawImage(img, 0, 0, w, h);
+        }
         pronto(formato === 'png' ? tela.toDataURL('image/png') : tela.toDataURL('image/jpeg', 0.82));
       };
       img.src = leitor.result;
@@ -125,7 +132,7 @@
         item.img = dataUrl;
         cfg.redesenhar();
         aviso('Foto adicionada (' + Math.round(dataUrl.length / 1024) + ' KB, já reduzida).');
-      }, cfg.formato);
+      }, cfg.formato, cfg.quadrado);
     });
 
     var caminho = el('input', {
@@ -148,6 +155,37 @@
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     var titulo = card.querySelector('input:not([type=file]):not([type=checkbox])');
     if (titulo) { titulo.focus({ preventScroll: true }); titulo.select(); }
+  }
+
+  /* ---------- logo e ícone ---------- */
+  function desenharMarca() {
+    var logo = { img: dados.marca.logo };
+    var fl = blocoFoto(logo, {
+      dono: 'logo', larguraMax: 600, formato: 'png', classeExtra: ' logo-prev', textoVazio: 'sem logo (usa o símbolo padrão)',
+      classeVazia: function () { return ''; },
+      redesenhar: function () { dados.marca.logo = logo.img; desenharMarca(); }
+    });
+    fl.caminho.addEventListener('input', function () { dados.marca.logo = logo.img; });
+    fl.previa.style.height = '90px';
+    var areaLogo = $('logoWrap'); areaLogo.innerHTML = '';
+    [fl.previa, fl.arquivo, fl.caminho, fl.tirar].forEach(function (n) { areaLogo.appendChild(n); });
+    fl.tirar.textContent = 'Voltar ao padrão';
+
+    var nome = $('logoNome');
+    nome.checked = dados.marca.mostrarNome;
+    nome.onchange = function () { dados.marca.mostrarNome = nome.checked; };
+
+    var icone = { img: dados.marca.favicon };
+    var fi = blocoFoto(icone, {
+      dono: 'ícone da aba', larguraMax: 128, quadrado: 128, formato: 'png', classeExtra: ' logo-prev', textoVazio: 'padrão',
+      classeVazia: function () { return ''; },
+      redesenhar: function () { dados.marca.favicon = icone.img; desenharMarca(); }
+    });
+    fi.caminho.addEventListener('input', function () { dados.marca.favicon = icone.img; });
+    fi.previa.style.width = '96px'; fi.previa.style.height = '96px';
+    var areaIcone = $('faviconWrap'); areaIcone.innerHTML = '';
+    [fi.previa, fi.arquivo, fi.caminho, fi.tirar].forEach(function (n) { areaIcone.appendChild(n); });
+    fi.tirar.textContent = 'Voltar ao padrão';
   }
 
   /* ---------- foto de "Quem somos" ---------- */

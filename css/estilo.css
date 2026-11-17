@@ -13,6 +13,8 @@ body{font-family:'Inter',system-ui,sans-serif;color:#1b2a3a}
 h1,h2,h3,h4,.logo-text{font-family:'Nunito',system-ui,sans-serif}
 .logo-text{font-weight:900;font-size:1.5rem;color:var(--marca-900)}
 .logo-text span{color:var(--marca)}
+.logo-img{height:44px;width:auto;max-width:200px;object-fit:contain}
+.logo-oculto{position:absolute;width:0;height:0;overflow:hidden}
 .ico{width:1.05em;height:1.05em;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.9;margin-right:.35rem}
 
 /* marca / botões */
