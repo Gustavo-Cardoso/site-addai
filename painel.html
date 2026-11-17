@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Painel de controle — ADDAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="vendor/bootstrap.min.css" rel="stylesheet" />
+<link href="css/estilo.css" rel="stylesheet" />
+<link href="css/painel.css" rel="stylesheet" />
+</head>
+<body class="painel">
+
+<header class="painel-topo py-3 mb-4">
+  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <strong class="logo-text text-white">⚙ Painel ADDAI</strong>
+    <a href="index.html" class="btn btn-outline-light btn-sm">← Voltar ao site</a>
+  </div>
+</header>
+
+<main class="container pb-5 painel-corpo">
+
+  <div class="alert alert-info">
+    <strong>Como funciona:</strong> edite, clique em <em>Ver prévia</em> para conferir e depois em
+    <em>Gerar e copiar</em>. Cole o resultado no arquivo <code>conteudo.json</code> do repositório no GitHub —
+    em cerca de 1 minuto o site atualiza para todos. Nada do que você faz aqui vai ao ar sozinho.
+  </div>
+
+  <div class="alert alert-warning d-none" id="avisoRascunho" role="status">
+    Você tem um <strong>rascunho</strong> salvo neste navegador. Ele só aparece na prévia — os visitantes continuam vendo o conteúdo publicado.
+  </div>
+
+  <!-- ===== Informativos ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Informativos</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addInfo">+ Novo informativo</button>
+  </div>
+  <p class="text-secondary small">Aparecem no site do mais recente para o mais antigo (pela data). A página inicial mostra os 4 primeiros; os demais ficam em "Ver todos os informativos".</p>
+  <div id="infosWrap" class="d-grid gap-3 mb-4"></div>
+
+  <!-- ===== Carrossel ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Imagens do carrossel</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addSlide">+ Adicionar slide</button>
+  </div>
+  <p class="text-secondary small">Fotos escolhidas do computador são reduzidas automaticamente e ficam embutidas no <code>conteudo.json</code>. Use sempre fotos com autorização de quem aparece nelas.</p>
+  <div id="slidesWrap" class="d-grid gap-3 mb-4"></div>
+
+  <!-- ===== Textos ===== -->
+  <h2 class="h4 fw-bold mb-3">Textos da página inicial</h2>
+  <div class="card card-body mb-4">
+    <div class="mb-3"><label class="form-label" for="t_navDoar">Botão do topo (doação)</label><input class="form-control" id="t_navDoar"></div>
+    <div class="mb-3"><label class="form-label" for="t_bemvindoTitulo">Título de boas-vindas</label><input class="form-control" id="t_bemvindoTitulo"></div>
+    <div class="mb-3"><label class="form-label" for="t_bemvindoTexto">Texto de boas-vindas</label><textarea class="form-control" id="t_bemvindoTexto" rows="3"></textarea></div>
+    <div class="mb-3"><label class="form-label" for="t_sobreTitulo">Título de "Quem somos"</label><input class="form-control" id="t_sobreTitulo"></div>
+    <div class="mb-3"><label class="form-label" for="t_sobreTexto">Texto de "Quem somos"</label><textarea class="form-control" id="t_sobreTexto" rows="4"></textarea></div>
+    <div><label class="form-label" for="t_chamadaDoacao">Título de "Como ajudar"</label><input class="form-control" id="t_chamadaDoacao"></div>
+  </div>
+
+  <!-- ===== Dados da associação ===== -->
+  <h2 class="h4 fw-bold mb-1">Dados da associação</h2>
+  <p class="text-secondary small">Campo vazio = o site mostra o marcador amarelo de "a preencher".</p>
+  <div class="card card-body mb-4">
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label" for="t_telefone">Telefone / WhatsApp</label><input class="form-control" id="t_telefone" placeholder="(00) 00000-0000" autocomplete="off"></div>
+      <div class="col-md-6"><label class="form-label" for="t_email">E-mail de contato</label><input type="email" class="form-control" id="t_email" placeholder="contato@addai.org.br" autocomplete="off"></div>
+      <div class="col-12"><label class="form-label" for="t_endereco">Endereço</label><input class="form-control" id="t_endereco" placeholder="Rua, nº — Bairro, Cidade – UF" autocomplete="off"></div>
+      <div class="col-md-6"><label class="form-label" for="t_pixChave">Chave PIX</label><input class="form-control" id="t_pixChave" autocomplete="off"></div>
+      <div class="col-md-6"><label class="form-label" for="t_pixTitular">Titular do PIX</label><input class="form-control" id="t_pixTitular" autocomplete="off"></div>
+      <div class="col-md-6"><label class="form-label" for="t_cnpj">CNPJ (aparece no rodapé)</label><input class="form-control" id="t_cnpj" placeholder="CNPJ 00.000.000/0001-00" autocomplete="off"></div>
+    </div>
+  </div>
+
+  <!-- ===== Publicar ===== -->
+  <h2 class="h4 fw-bold mb-3">Publicar</h2>
+  <div class="card card-body mb-4">
+    <ol class="text-secondary small ps-3">
+      <li>Clique em <strong>Gerar e copiar</strong>.</li>
+      <li>No GitHub, abra o arquivo <code>conteudo.json</code>, clique no lápis ✏️, apague tudo e cole.</li>
+      <li>Clique em <strong>Commit changes</strong>. Pronto.</li>
+    </ol>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+      <button type="button" class="btn btn-primary" id="gerar">Gerar e copiar conteudo.json</button>
+      <a class="btn btn-dark d-none" id="abrirGitHub" target="_blank" rel="noopener" href="#">Abrir conteudo.json no GitHub ↗</a>
+      <button type="button" class="btn btn-outline-secondary" id="baixar">Baixar arquivo</button>
+    </div>
+    <label class="visually-hidden" for="jsonOut">Conteúdo gerado</label>
+    <textarea class="form-control" id="jsonOut" readonly placeholder="O conteúdo gerado aparece aqui…"></textarea>
+    <div class="small text-secondary mt-2" id="jsonInfo"></div>
+  </div>
+
+  <div class="barra-acoes d-flex gap-2 flex-wrap">
+    <button type="button" class="btn btn-marca" id="salvar">Salvar rascunho</button>
+    <button type="button" class="btn btn-success" id="previa">Ver prévia</button>
+    <button type="button" class="btn btn-outline-danger ms-auto" id="descartar">Descartar rascunho</button>
+  </div>
+</main>
+
+<!-- confirmação de descarte -->
+<div class="modal fade" id="modalDescartar" tabindex="-1" aria-labelledby="tituloDescartar" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+    <div class="modal-header"><h2 class="modal-title h5" id="tituloDescartar">Descartar rascunho?</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
+    <div class="modal-body">As alterações não publicadas deste navegador serão apagadas e o painel volta a mostrar o conteúdo publicado.</div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="confirmarDescartar">Descartar</button>
+    </div>
+  </div></div>
+</div>
+
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+  <div class="toast align-items-center border-0 text-bg-success" id="toast" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="js/conteudo-padrao.js"></script>
+<script src="js/painel.js"></script>
+</body>
+</html>

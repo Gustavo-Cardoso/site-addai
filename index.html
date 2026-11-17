@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ADDAI — Acolhimento e inclusão para pessoas autistas</title>
+<meta name="description" content="ADDAI — associação sem fins lucrativos de acolhimento, inclusão e apoio a pessoas autistas e suas famílias." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="vendor/bootstrap.min.css" rel="stylesheet" />
+<link href="css/estilo.css" rel="stylesheet" />
+</head>
+<body>
+<a href="#inicio" class="visually-hidden-focusable p-2 bg-dark text-white position-absolute">Pular para o conteúdo</a>
+
+<!-- Aviso que só aparece na prévia aberta pelo painel (index.html#previa) -->
+<div id="previaBanner" class="previa-banner d-none" role="status">
+  Você está vendo uma <strong>prévia</strong> do rascunho salvo neste navegador — os visitantes veem o conteúdo publicado.
+  <a href="painel.html">Voltar ao painel</a>
+  <button type="button" class="btn btn-sm btn-outline-dark ms-2" id="previaSair">Sair da prévia</button>
+</div>
+
+<!-- ===== Barra superior ===== -->
+<div class="topbar text-white">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2 py-1 small">
+    <span><svg class="ico" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>
+      <span class="ph" data-key="telefone">[(00) 00000-0000]</span></span>
+    <span class="d-flex align-items-center gap-3">
+      <a href="https://instagram.com/addaiautistas0425" target="_blank" rel="noopener" class="text-white text-decoration-none">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+        @addaiautistas0425</a>
+    </span>
+  </div>
+</div>
+
+<!-- ===== Navbar ===== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#inicio">
+      <svg width="46" height="28" viewBox="12 20 40 24" aria-hidden="true">
+        <defs><linearGradient id="inf" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff7a59"/><stop offset=".35" stop-color="#f6b63f"/>
+          <stop offset=".65" stop-color="#2ec4b6"/><stop offset="1" stop-color="#2b6fb3"/></linearGradient></defs>
+        <path d="M20 32c0-7 10-7 12 0s12 7 12 0-10-7-12 0-12 7-12 0z" fill="none" stroke="url(#inf)" stroke-width="7" stroke-linecap="round" transform="scale(1.15) translate(-4 -4)"/>
+      </svg>
+      <span class="logo-text">ADD<span>AI</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+        <li class="nav-item" id="navInformativos"><a class="nav-link" href="#informativos">Informativos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projetos">O que fazemos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#ajudar">Como ajudar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+        <li class="nav-item ms-lg-2"><a class="btn btn-marca" href="#ajudar" data-key="navDoar">Doe agora</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Carrossel ===== -->
+<div id="inicio">
+  <div id="carrossel" class="carousel slide carousel-fade">
+    <div class="carousel-indicators" id="carrosselIndicadores"></div>
+    <div class="carousel-inner" id="carrosselInner"><!-- slides via JS --></div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carrossel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span></button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carrossel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Próximo</span></button>
+    <button class="carrossel-pausa" type="button" id="carrosselPausa" aria-label="Pausar a troca automática de slides">❚❚</button>
+  </div>
+</div>
+
+<!-- ===== Boas-vindas ===== -->
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <span class="eyebrow">Seja bem-vindo</span>
+    <h2 class="fw-bold mt-2" data-key="bemvindoTitulo">Bem-vindo à ADDAI</h2>
+    <p class="lead text-secondary mx-auto" style="max-width:720px" data-key="bemvindoTexto">
+      Somos uma associação sem fins lucrativos dedicada a acolher pessoas autistas e suas famílias, promovendo inclusão, informação e oportunidades.
+    </p>
+  </div>
+</section>
+
+<!-- ===== Quem somos ===== -->
+<section id="sobre" class="py-5 secao-clara">
+  <div class="container">
+    <div class="row align-items-center g-4 g-lg-5">
+      <div class="col-lg-6">
+        <div class="foto-ph" role="img" aria-label="Espaço para foto da ADDAI">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-4-4 3-3-2-6 5"/></svg>
+          <span class="ph">[coloque aqui uma foto real da equipe ou das atividades]</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <span class="eyebrow">Quem somos</span>
+        <h2 class="fw-bold mt-2" data-key="sobreTitulo">Uma rede de apoio para a comunidade autista</h2>
+        <p class="text-secondary" data-key="sobreTexto">A ADDAI reúne famílias, profissionais e voluntários com um objetivo comum: construir uma sociedade mais acessível e acolhedora para pessoas autistas de todos os níveis de suporte.</p>
+        <div class="row g-3 mt-2">
+          <div class="col-sm-6"><div class="mini-card"><h3>🎯 Missão</h3><p>Acolher, incluir e defender os direitos de pessoas autistas e suas famílias.</p></div></div>
+          <div class="col-sm-6"><div class="mini-card"><h3>🌱 Visão</h3><p>Ser referência em acolhimento e inclusão na nossa região.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Informativos (os 4 mais recentes; lista completa em informativos.html) ===== -->
+<section id="informativos" class="py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow">Fique por dentro</span>
+      <h2 class="fw-bold mt-2">Informativos</h2>
+    </div>
+    <div class="row g-4 justify-content-center" id="informativosGrid"><!-- cartões via js/informativos.js --></div>
+    <div class="text-center mt-5">
+      <a class="btn btn-outline-primary rounded-pill px-4" href="informativos.html">Ver todos os informativos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== O que fazemos ===== -->
+<section id="projetos" class="py-5 secao-clara">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow">Nossos pilares</span>
+      <h2 class="fw-bold mt-2">O que a ADDAI faz</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3"><div class="card card-pilar h-100"><div class="card-body"><div class="ic coral"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h3>Acolhimento às famílias</h3><p>Escuta, orientação e grupos de apoio após o diagnóstico.</p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card card-pilar h-100"><div class="card-body"><div class="ic teal"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/><path d="M9 21h6"/></svg></div><h3>Atividades e estímulos</h3><p>Oficinas que estimulam comunicação, autonomia e convívio.</p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card card-pilar h-100"><div class="card-body"><div class="ic amber"><svg viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8A3 3 0 0 1 6 15"/></svg></div><h3>Conscientização</h3><p>Palestras e campanhas sobre autismo na comunidade.</p></div></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card card-pilar h-100"><div class="card-body"><div class="ic azul"><svg viewBox="0 0 24 24"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M3 12l9 4.5L21 12"/></svg></div><h3>Direitos e inclusão</h3><p>Apoio na garantia de direitos em educação e saúde.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Impacto ===== -->
+<section class="py-5 secao-impacto text-white">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-6 col-lg-3"><div class="stat ph">+120</div><p class="mb-0">famílias acolhidas</p></div>
+      <div class="col-6 col-lg-3"><div class="stat ph">+30</div><p class="mb-0">voluntários</p></div>
+      <div class="col-6 col-lg-3"><div class="stat ph">+15</div><p class="mb-0">ações por ano</p></div>
+      <div class="col-6 col-lg-3"><div class="stat ph">2025</div><p class="mb-0">desde</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Como ajudar ===== -->
+<section id="ajudar" class="py-5 secao-clara">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow">Faça parte</span>
+      <h2 class="fw-bold mt-2" data-key="chamadaDoacao">Como você pode ajudar</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="card h-100"><div class="card-body"><div class="ic coral"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
+        <h3>Doe via PIX</h3><p class="text-secondary">Qualquer valor sustenta nossas atividades.</p>
+        <div class="pix-box"><code id="pixKey" class="ph" data-key="pixChave">[sua-chave-pix@exemplo.org]</code><button class="btn btn-sm btn-outline-primary ms-auto" id="copyPix">Copiar</button></div>
+        <p class="small text-secondary mb-0">Titular: <span class="ph" data-key="pixTitular">[nome da associação]</span></p></div></div></div>
+      <div class="col-lg-4"><div class="card h-100"><div class="card-body"><div class="ic teal"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <h3>Seja voluntário</h3><p class="text-secondary">Doe seu tempo e talento em eventos, oficinas e mais.</p><a href="#contato" class="btn btn-outline-secondary btn-sm">Quero ajudar</a></div></div></div>
+      <div class="col-lg-4"><div class="card h-100"><div class="card-body"><div class="ic amber"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3"/></svg></div>
+        <h3>Empresa parceira</h3><p class="text-secondary">Sua empresa pode apoiar projetos e contratar de forma inclusiva.</p><a href="#contato" class="btn btn-outline-secondary btn-sm">Seja parceiro</a></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Parceiros ===== -->
+<section id="parceiros" class="py-5 bg-white">
+  <div class="container text-center">
+    <span class="eyebrow">Quem apoia</span>
+    <h2 class="fw-bold mt-2 mb-4">Nossos parceiros</h2>
+    <div class="row g-4 justify-content-center align-items-center">
+      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 1]</div></div>
+      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 2]</div></div>
+      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 3]</div></div>
+      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 4]</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contato ===== -->
+<section id="contato" class="py-5 secao-contato text-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="eyebrow claro">Fale conosco</span>
+      <h2 class="fw-bold mt-2 text-white">Vamos conversar</h2>
+      <p class="opacity-75 mb-0">Tire dúvidas, proponha parcerias ou descubra como participar.</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-sm-6 col-lg-3"><div class="contato-card">
+        <svg class="ico-g" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <strong>Endereço</strong>
+        <span class="ph" data-key="endereco">[Rua, nº — Bairro, Cidade – UF]</span></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="contato-card">
+        <svg class="ico-g" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>
+        <strong>Telefone / WhatsApp</strong>
+        <span class="ph" data-key="telefone">[(00) 00000-0000]</span></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="contato-card">
+        <svg class="ico-g" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+        <strong>E-mail</strong>
+        <a class="ph" data-key="email" href="#contato">[contato@addai.org.br]</a></div></div>
+      <div class="col-sm-6 col-lg-3"><div class="contato-card">
+        <svg class="ico-g" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>
+        <strong>Instagram</strong>
+        <a href="https://instagram.com/addaiautistas0425" target="_blank" rel="noopener">@addaiautistas0425</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Rodapé ===== -->
+<footer class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <svg width="40" height="24" viewBox="12 20 40 24" aria-hidden="true"><path d="M20 32c0-7 10-7 12 0s12 7 12 0-10-7-12 0-12 7-12 0z" fill="none" stroke="url(#inf)" stroke-width="7" stroke-linecap="round" transform="scale(1.15) translate(-4 -4)"/></svg>
+          <span class="logo-text text-white">ADD<span class="text-info">AI</span></span>
+        </div>
+        <p class="opacity-75" style="max-width:34ch">Acolhimento, inclusão e defesa dos direitos de pessoas autistas e suas famílias.</p>
+      </div>
+      <div class="col-6 col-lg-3"><h4>Navegação</h4><ul class="list-unstyled">
+        <li><a href="#sobre">Sobre</a></li><li><a href="informativos.html">Informativos</a></li>
+        <li><a href="#ajudar">Como ajudar</a></li><li><a href="#contato">Contato</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h4>Gestão</h4><ul class="list-unstyled">
+        <li><a href="painel.html">Painel de controle</a></li>
+        <li><a href="https://instagram.com/addaiautistas0425" target="_blank" rel="noopener">Instagram</a></li></ul></div>
+    </div>
+    <hr class="border-secondary opacity-25">
+    <div class="d-flex justify-content-between flex-wrap gap-2 small opacity-75">
+      <span>© <span id="year"></span> ADDAI · <span class="ph" data-key="cnpj">[CNPJ 00.000.000/0001-00]</span></span>
+      <span>Feito com 💙 pela comunidade</span>
+    </div>
+  </div>
+</footer>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="js/conteudo-padrao.js"></script>
+<script src="js/informativos.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

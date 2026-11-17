@@ -1,0 +1,76 @@
+{
+  "textos": {
+    "navDoar": "Doe agora",
+    "bemvindoTitulo": "Bem-vindo à ADDAI",
+    "bemvindoTexto": "Somos uma associação sem fins lucrativos dedicada a acolher pessoas autistas e suas famílias, promovendo inclusão, informação e oportunidades.",
+    "sobreTitulo": "Uma rede de apoio para a comunidade autista",
+    "sobreTexto": "A ADDAI reúne famílias, profissionais e voluntários com um objetivo comum: construir uma sociedade mais acessível e acolhedora para pessoas autistas de todos os níveis de suporte.",
+    "chamadaDoacao": "Como você pode ajudar",
+    "telefone": "",
+    "email": "",
+    "endereco": "",
+    "pixChave": "",
+    "pixTitular": "",
+    "cnpj": ""
+  },
+  "slides": [
+    {
+      "titulo": "Acolhimento e inclusão",
+      "subtitulo": "Apoio a pessoas autistas e suas famílias",
+      "img": "",
+      "cor": "slide-a",
+      "botaoTexto": "Como ajudar",
+      "botaoLink": "#ajudar"
+    },
+    {
+      "titulo": "Você também faz parte",
+      "subtitulo": "Seja voluntário ou empresa parceira",
+      "img": "",
+      "cor": "slide-b",
+      "botaoTexto": "Participar",
+      "botaoLink": "#contato"
+    },
+    {
+      "titulo": "Doe e transforme vidas",
+      "subtitulo": "Cada contribuição mantém nossos projetos de pé",
+      "img": "",
+      "cor": "slide-c",
+      "botaoTexto": "Doar via PIX",
+      "botaoLink": "#ajudar"
+    }
+  ],
+  "informativos": [
+    {
+      "id": "exemplo-1",
+      "titulo": "[Exemplo] Roda de conversa para famílias",
+      "data": "2026-11-10",
+      "img": "",
+      "imgAlt": "",
+      "texto": "Este é um informativo de exemplo, para mostrar como a seção funciona.\n\nEscreva aqui o texto completo: o que vai acontecer, quando, onde e como participar. Deixe uma linha em branco entre os parágrafos.\n\nEdite ou remova este exemplo pelo painel de controle."
+    },
+    {
+      "id": "exemplo-2",
+      "titulo": "[Exemplo] Campanha de doações de fim de ano",
+      "data": "2026-11-03",
+      "img": "",
+      "imgAlt": "",
+      "texto": "Este é um informativo de exemplo.\n\nUse este espaço para divulgar campanhas, prestar contas e agradecer a quem apoia a associação."
+    },
+    {
+      "id": "exemplo-3",
+      "titulo": "[Exemplo] Oficina de atividades sensoriais",
+      "data": "2026-10-20",
+      "img": "",
+      "imgAlt": "",
+      "texto": "Este é um informativo de exemplo.\n\nConte como foi a atividade e coloque uma foto (sempre com autorização de quem aparece nela)."
+    },
+    {
+      "id": "exemplo-4",
+      "titulo": "[Exemplo] Palestra sobre direitos da pessoa autista",
+      "data": "2026-10-05",
+      "img": "",
+      "imgAlt": "",
+      "texto": "Este é um informativo de exemplo.\n\nLinks escritos por extenso viram clicáveis, por exemplo: https://www.instagram.com/addaiautistas0425"
+    }
+  ]
+}

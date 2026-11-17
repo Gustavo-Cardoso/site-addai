@@ -1,0 +1,15 @@
+/* painel.css — estilos só do painel de controle */
+body.painel{background:#eef3f9}
+.painel-topo{background:var(--marca-900)}
+.painel-corpo{max-width:880px}
+.painel .card{box-shadow:none}
+
+.slide-card,.info-card{border:1px solid #dbe4ee;border-radius:14px;background:#fff}
+.slide-prev{height:92px;border-radius:10px;background-color:#dbe9fb;background-size:cover;background-position:center;
+  background-repeat:no-repeat;display:grid;place-items:center;color:#fff;font-size:.78rem;text-align:center;padding:0 .5rem}
+
+.info-sem-foto{background-color:#c9d6e6;color:#52677d}
+
+#jsonOut{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.8rem;min-height:200px}
+
+.barra-acoes{position:sticky;bottom:0;background:#eef3f9;padding:12px 0;border-top:1px solid #dbe4ee;z-index:5}

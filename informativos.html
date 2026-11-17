@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Informativos — ADDAI</title>
+<meta name="description" content="Notícias, avisos e novidades da ADDAI." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="vendor/bootstrap.min.css" rel="stylesheet" />
+<link href="css/estilo.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+<a href="#paginaInformativos" class="visually-hidden-focusable p-2 bg-dark text-white position-absolute">Pular para o conteúdo</a>
+
+<!-- Aviso que só aparece na prévia aberta pelo painel -->
+<div id="previaBanner" class="previa-banner d-none" role="status">
+  Você está vendo uma <strong>prévia</strong> do rascunho salvo neste navegador — os visitantes veem o conteúdo publicado.
+  <a href="painel.html">Voltar ao painel</a>
+  <button type="button" class="btn btn-sm btn-outline-dark ms-2" id="previaSair">Sair da prévia</button>
+</div>
+
+<!-- ===== Navbar ===== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <svg width="46" height="28" viewBox="12 20 40 24" aria-hidden="true">
+        <defs><linearGradient id="inf" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ff7a59"/><stop offset=".35" stop-color="#f6b63f"/>
+          <stop offset=".65" stop-color="#2ec4b6"/><stop offset="1" stop-color="#2b6fb3"/></linearGradient></defs>
+        <path d="M20 32c0-7 10-7 12 0s12 7 12 0-10-7-12 0-12 7-12 0z" fill="none" stroke="url(#inf)" stroke-width="7" stroke-linecap="round" transform="scale(1.15) translate(-4 -4)"/>
+      </svg>
+      <span class="logo-text">ADD<span>AI</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="informativos.html">Informativos</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#ajudar">Como ajudar</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#contato">Contato</a></li>
+        <li class="nav-item ms-lg-2"><a class="btn btn-marca" href="index.html#ajudar" data-key="navDoar">Doe agora</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main id="paginaInformativos" class="flex-grow-1 py-5 secao-clara">
+  <div class="container">
+
+    <!-- lista completa -->
+    <div id="infoLista">
+      <div class="text-center mb-5">
+        <span class="eyebrow">Fique por dentro</span>
+        <h1 class="h2 fw-bold mt-2">Informativos</h1>
+        <p class="text-secondary mb-0">Notícias, avisos e novidades da ADDAI.</p>
+      </div>
+      <div class="row g-4" id="infoGrade"></div>
+      <p class="text-center text-secondary d-none" id="infoVazio">Ainda não há informativos publicados. Volte em breve!</p>
+    </div>
+
+    <!-- leitura de um informativo -->
+    <article id="infoDetalhe" class="info-artigo mx-auto d-none">
+      <a href="informativos.html" class="info-voltar">← Todos os informativos</a>
+      <div class="info-data mt-3" id="infoData"></div>
+      <h1 class="fw-bold mb-4" id="infoTitulo"></h1>
+      <img id="infoFoto" class="info-foto d-none mb-4" alt="">
+      <div class="info-texto" id="infoTexto"></div>
+      <hr class="my-4">
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="informativos.html" class="btn btn-outline-primary rounded-pill px-4">← Todos os informativos</a>
+        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" id="infoCopiar">Copiar link</button>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<!-- ===== Rodapé ===== -->
+<footer class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <svg width="40" height="24" viewBox="12 20 40 24" aria-hidden="true"><path d="M20 32c0-7 10-7 12 0s12 7 12 0-10-7-12 0-12 7-12 0z" fill="none" stroke="url(#inf)" stroke-width="7" stroke-linecap="round" transform="scale(1.15) translate(-4 -4)"/></svg>
+          <span class="logo-text text-white">ADD<span class="text-info">AI</span></span>
+        </div>
+        <p class="opacity-75" style="max-width:34ch">Acolhimento, inclusão e defesa dos direitos de pessoas autistas e suas famílias.</p>
+      </div>
+      <div class="col-6 col-lg-3"><h4>Navegação</h4><ul class="list-unstyled">
+        <li><a href="index.html">Início</a></li><li><a href="informativos.html">Informativos</a></li>
+        <li><a href="index.html#ajudar">Como ajudar</a></li><li><a href="index.html#contato">Contato</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h4>Gestão</h4><ul class="list-unstyled">
+        <li><a href="painel.html">Painel de controle</a></li>
+        <li><a href="https://instagram.com/addaiautistas0425" target="_blank" rel="noopener">Instagram</a></li></ul></div>
+    </div>
+    <hr class="border-secondary opacity-25">
+    <div class="d-flex justify-content-between flex-wrap gap-2 small opacity-75">
+      <span>© <span id="year"></span> ADDAI · <span class="ph" data-key="cnpj">[CNPJ 00.000.000/0001-00]</span></span>
+      <span>Feito com 💙 pela comunidade</span>
+    </div>
+  </div>
+</footer>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="js/conteudo-padrao.js"></script>
+<script src="js/informativos.js"></script>
+</body>
+</html>

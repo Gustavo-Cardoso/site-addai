@@ -1,0 +1,121 @@
+/* estilo.css — identidade visual do site (por cima do Bootstrap) */
+:root{
+  --marca:#2b6fb3;        /* azul institucional */
+  --marca-escuro:#1d4e86;
+  --marca-900:#10243b;
+  --coral:#ff7a59;
+  --coral-escuro:#f3603c;
+  --teal:#2ec4b6;
+  --amber:#f6b63f;
+}
+html{scroll-padding-top:84px}
+body{font-family:'Inter',system-ui,sans-serif;color:#1b2a3a}
+h1,h2,h3,h4,.logo-text{font-family:'Nunito',system-ui,sans-serif}
+.logo-text{font-weight:900;font-size:1.5rem;color:var(--marca-900)}
+.logo-text span{color:var(--marca)}
+.ico{width:1.05em;height:1.05em;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.9;margin-right:.35rem}
+
+/* marca / botões */
+.btn-marca{background:var(--coral);border:none;color:#fff;font-family:'Nunito',system-ui,sans-serif;font-weight:800;border-radius:999px;padding:.55rem 1.3rem}
+.btn-marca:hover{background:var(--coral-escuro);color:#fff}
+.text-marca{color:var(--marca)!important}
+.eyebrow{display:inline-block;font-family:'Nunito',system-ui,sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  font-size:.75rem;color:var(--marca);background:#e8f1fb;padding:.3rem .8rem;border-radius:999px}
+.eyebrow.claro{color:#cfe3f7;background:rgba(255,255,255,.12)}
+
+/* barra superior + navbar */
+.topbar{background:var(--marca-escuro)}
+.topbar a:hover{text-decoration:underline!important}
+.navbar .nav-link{font-weight:600;color:var(--marca-900)}
+.navbar .nav-link:hover{color:var(--marca)}
+
+/* placeholder */
+.ph{background:#fff4d6;border-bottom:2px dotted var(--amber);padding:0 .2em;border-radius:4px;font-weight:600;color:#7a5a12}
+
+/* carrossel */
+.carousel-item .slide-bg{height:72vh;min-height:420px;max-height:640px;background-size:cover;background-position:center;position:relative}
+.slide-a{background:linear-gradient(135deg,#1d4e86,#2b6fb3 55%,#3d8ad1)}
+.slide-b{background:linear-gradient(135deg,#166e66,#2ec4b6)}
+.slide-c{background:linear-gradient(135deg,#c2410c,#ff7a59)}
+.carousel-item .slide-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55))}
+.carousel-caption{bottom:auto;top:50%;transform:translateY(-50%);z-index:2;text-align:left;left:11%;right:11%;max-width:720px}
+.carousel-caption h2{font-weight:900;font-size:clamp(1.8rem,4.5vw,3rem);text-shadow:0 2px 16px rgba(0,0,0,.4)}
+.carousel-caption p{font-size:clamp(1rem,2.2vw,1.3rem);text-shadow:0 2px 12px rgba(0,0,0,.4)}
+@media(max-width:576px){.carousel-caption{text-align:center;left:13%;right:13%}}
+
+/* seções */
+.secao-clara{background:#f3f7fc}
+.eyebrow+h2{margin-top:.4rem}
+.foto-ph{aspect-ratio:4/3;border-radius:18px;background:linear-gradient(135deg,#dbe9fb,#eef5fd);
+  display:flex;flex-direction:column;gap:.6rem;align-items:center;justify-content:center;color:var(--marca);text-align:center;padding:24px;box-shadow:0 20px 50px -24px rgba(16,36,59,.35)}
+.mini-card{background:#fff;border:1px solid #e3eaf2;border-radius:14px;padding:16px 18px;height:100%}
+.mini-card h3{font-size:1.05rem;font-weight:800;margin-bottom:.2rem}
+.mini-card p{margin:0;color:#55677a;font-size:.95rem}
+
+/* cards pilares */
+.card{border:1px solid #e8eef5;border-radius:18px;box-shadow:0 10px 30px -16px rgba(16,36,59,.18)}
+.card-pilar{transition:transform .18s ease,box-shadow .2s ease}
+.card-pilar:hover{transform:translateY(-5px);box-shadow:0 24px 50px -22px rgba(16,36,59,.3)}
+.card h3{font-size:1.12rem;font-weight:800;margin:.2rem 0 .4rem}
+.ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:.8rem;background:#e8f1fb;color:var(--marca)}
+.ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8}
+.ic.coral{background:#ffe9e2;color:var(--coral-escuro)}
+.ic.teal{background:#dcf6f3;color:#1aa89a}
+.ic.amber{background:#fdf0d6;color:#c98a12}
+.ic.azul{background:#e8f1fb;color:var(--marca)}
+
+/* impacto */
+.secao-impacto{background:linear-gradient(135deg,var(--marca-escuro),var(--marca))}
+.secao-impacto .stat{font-family:'Nunito',system-ui,sans-serif;font-weight:900;font-size:clamp(2rem,5vw,2.8rem);line-height:1}
+.secao-impacto .ph{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* pix */
+.pix-box{display:flex;align-items:center;gap:.5rem;background:#f3f7fc;border:1px dashed var(--marca);border-radius:10px;padding:.5rem .7rem;margin:.5rem 0}
+.pix-box code{color:var(--marca-escuro)}
+
+/* parceiros */
+.parceiro{height:90px;border-radius:14px;background:#f3f7fc;border:1px solid #e3eaf2;display:grid;place-items:center;color:#8aa0b6;font-size:.85rem}
+
+/* contato */
+.secao-contato{background:var(--marca-900)}
+.contato-card{height:100%;display:flex;flex-direction:column;align-items:center;gap:.3rem;text-align:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 16px;overflow-wrap:anywhere}
+.contato-card .ico-g{width:30px;height:30px;fill:none;stroke:#bcd6f2;stroke-width:1.7;margin-bottom:.35rem}
+.contato-card strong{font-family:'Nunito',system-ui,sans-serif;color:#fff}
+
+/* rodapé */
+footer{background:#0a1829;color:#8ba3bd}
+footer h4{color:#fff;font-family:'Nunito',system-ui,sans-serif;font-size:1rem;margin-bottom:.8rem}
+footer a{color:#9fb6cf;text-decoration:none}
+footer a:hover{color:#fff}
+
+/* informativos */
+.card-info{display:block;overflow:hidden;text-decoration:none;color:inherit;transition:transform .18s ease,box-shadow .2s ease}
+.card-info:hover{transform:translateY(-5px);box-shadow:0 24px 50px -22px rgba(16,36,59,.3);color:inherit}
+.info-capa{aspect-ratio:16/10;background-size:cover;background-position:center;display:grid;place-items:center;color:rgba(255,255,255,.9)}
+.info-capa svg{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.5}
+.info-data{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#55677a;margin-bottom:.3rem}
+.card .info-titulo{font-size:1.08rem;font-weight:800;line-height:1.3;margin:0;color:var(--marca-900)}
+.info-resumo{font-size:.93rem;color:#55677a;margin:.5rem 0 0}
+.info-artigo{max-width:760px}
+.info-artigo h1{font-size:clamp(1.6rem,4vw,2.3rem);color:var(--marca-900)}
+.info-foto{width:100%;border-radius:18px;box-shadow:0 20px 50px -24px rgba(16,36,59,.35)}
+.info-texto{font-size:1.08rem;line-height:1.75;overflow-wrap:anywhere}
+.info-voltar{font-weight:600;text-decoration:none}
+
+/* aviso de prévia (rascunho do painel) */
+.previa-banner{background:#fff4d6;color:#7a5a12;border-bottom:2px solid var(--amber);padding:.6rem 1rem;text-align:center;font-size:.92rem}
+.previa-banner a{color:#7a5a12;font-weight:700;margin-left:.5rem}
+
+/* botão pausar/continuar do carrossel */
+.carrossel-pausa{position:absolute;right:16px;bottom:14px;z-index:5;width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.6);background:rgba(16,36,59,.55);color:#fff;font-size:.8rem;line-height:1;cursor:pointer}
+.carrossel-pausa:hover{background:rgba(16,36,59,.85)}
+
+/* links de contato preenchidos, sobre o fundo escuro */
+.secao-contato a:not(.ph){color:#bcd6f2}
+
+/* foco bem visível para quem navega pelo teclado */
+a:focus-visible,button:focus-visible,.btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
