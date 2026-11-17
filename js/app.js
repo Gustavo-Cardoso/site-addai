@@ -99,6 +99,55 @@
     }
   }
 
+  /* ---------- seções personalizadas (criadas no painel) ---------- */
+  function montarExtras(c) {
+    document.querySelectorAll('section[data-extra-secao]').forEach(function (s) { s.remove(); });
+    var ultimoDepois = {}; // mantém a ordem quando várias entram no mesmo lugar
+    c.extras.forEach(function (s) {
+      if (!s.ativa) return;
+      var ancora = ultimoDepois[s.depoisDe] || $(s.depoisDe);
+      if (!ancora) return;
+
+      var sec = document.createElement('section');
+      sec.id = 'sec-' + s.id;
+      sec.className = 'py-5 bg-white secao-alterna secao-extra';
+      sec.setAttribute('data-extra-secao', '');
+      var box = document.createElement('div'); box.className = 'container';
+
+      var texto = document.createElement('div');
+      if (s.etiqueta) { var e = document.createElement('span'); e.className = 'eyebrow'; e.textContent = s.etiqueta; texto.appendChild(e); }
+      if (s.titulo) { var h = document.createElement('h2'); h.className = 'fw-bold mt-2 mb-3'; h.textContent = s.titulo; texto.appendChild(h); }
+      var corpo = document.createElement('div'); corpo.className = 'texto-extra text-secondary';
+      Informativos.textoParaDom(s.texto, corpo);
+      texto.appendChild(corpo);
+      if (s.botaoTexto) {
+        var a = document.createElement('a');
+        a.className = 'btn btn-marca mt-2';
+        a.href = s.botaoLink || '#contato';
+        if (/^https?:\/\//i.test(a.getAttribute('href'))) { a.target = '_blank'; a.rel = 'noopener'; }
+        a.textContent = s.botaoTexto;
+        texto.appendChild(a);
+      }
+
+      if (s.img) {
+        var linha = document.createElement('div'); linha.className = 'row align-items-center g-4 g-lg-5';
+        var colImg = document.createElement('div'); colImg.className = 'col-lg-6' + (s.ladoImg === 'direita' ? ' order-lg-2' : '');
+        var img = document.createElement('img'); img.className = 'img-extra'; img.src = s.img; img.alt = s.imgAlt || ''; img.loading = 'lazy';
+        colImg.appendChild(img);
+        var colTxt = document.createElement('div'); colTxt.className = 'col-lg-6';
+        colTxt.appendChild(texto);
+        linha.appendChild(colImg); linha.appendChild(colTxt);
+        box.appendChild(linha);
+      } else {
+        texto.className = 'text-center mx-auto texto-centro';
+        box.appendChild(texto);
+      }
+      sec.appendChild(box);
+      ancora.parentNode.insertBefore(sec, ancora.nextSibling);
+      ultimoDepois[s.depoisDe] = sec;
+    });
+  }
+
   /* ---------- copiar chave PIX ---------- */
   function ligarPix() {
     var copiar = $('copyPix');
@@ -119,6 +168,7 @@
       ADDAI.aplicarTextos(c);
       montarCarrossel(c);
       Informativos.mostrarDestaques(c);
+      montarExtras(c);
       ADDAI.aplicarSecoes(c);
     });
   });

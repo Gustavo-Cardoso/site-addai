@@ -11,7 +11,7 @@ Site institucional da **ADDAI**, associação sem fins lucrativos de acolhimento
 - Site responsivo (celular, tablet e computador)
 - Carrossel de imagens com botão de pausar
 - **Informativos:** os 4 mais recentes na página inicial e uma página com a lista completa e a leitura de cada um
-- Painel de controle (`painel.html`) com login pelo GitHub para ligar/desligar seções e editar informativos, parceiros, números de impacto, slides, textos e dados da associação — sem mexer no código
+- Painel de controle (`painel.html`) com login pelo GitHub para ligar/desligar seções, criar seções novas e editar informativos, parceiros, números de impacto, slides, textos e dados da associação — sem mexer no código
 - Doação por PIX com botão de copiar a chave
 - Cuidados de acessibilidade: navegação por teclado, foco visível, respeito à preferência de menos movimento
 
@@ -74,6 +74,10 @@ Cada publicação fica registrada no histórico do repositório (aba *Commits*),
 
 Em **Seções do site** dá para desligar Quem somos, Informativos, O que fazemos, Números de impacto e Parceiros. O link do menu some junto.
 Informativos, Números de impacto e Parceiros também ficam escondidos enquanto estiverem vazios — por isso a seção de parceiros só aparece depois do primeiro parceiro cadastrado.
+
+### Seções personalizadas
+
+Em **Seções personalizadas → + Nova seção** dá para criar seções novas na página inicial: etiqueta, título, texto, imagem (à esquerda ou à direita), botão, posição na página ("Depois de: …") e, se quiser, um link no menu. O interruptor *Visível no site* esconde a seção sem apagar.
 
 ### Informativos
 

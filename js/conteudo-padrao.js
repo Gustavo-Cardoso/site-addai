@@ -20,6 +20,17 @@ var ADDAI = (function () {
     ['parceiros', 'Parceiros']
   ];
 
+  // Onde uma seção personalizada pode entrar (id da seção que vem antes dela)
+  var POSICOES = [
+    ['boasvindas', 'Boas-vindas'],
+    ['sobre', 'Quem somos'],
+    ['informativos', 'Informativos'],
+    ['projetos', 'O que fazemos'],
+    ['impacto', 'Números de impacto'],
+    ['ajudar', 'Como ajudar'],
+    ['parceiros', 'Parceiros']
+  ];
+
   var PADRAO = {
     secoes: { sobre: true, informativos: true, projetos: true, impacto: true, parceiros: true },
     // valor vazio = o site mostra o marcador amarelo
@@ -31,6 +42,8 @@ var ADDAI = (function () {
     ],
     // vazio = a seção de parceiros não aparece no site
     parceiros: [],
+    // seções criadas pelo painel
+    extras: [],
     textos: {
       navDoar: 'Doe agora',
       bemvindoTitulo: 'Bem-vindo à ADDAI',
@@ -70,7 +83,7 @@ var ADDAI = (function () {
      (o que faltar vem do PADRAO). */
   function completar(c) {
     c = c || {};
-    var saida = { secoes: {}, impacto: [], parceiros: [], textos: {}, slides: [], informativos: [] };
+    var saida = { secoes: {}, impacto: [], parceiros: [], extras: [], textos: {}, slides: [], informativos: [] };
     Object.keys(PADRAO.secoes).forEach(function (k) {
       saida.secoes[k] = (c.secoes && typeof c.secoes[k] === 'boolean') ? c.secoes[k] : PADRAO.secoes[k];
     });
@@ -79,6 +92,23 @@ var ADDAI = (function () {
     });
     saida.parceiros = clonar(Array.isArray(c.parceiros) ? c.parceiros : PADRAO.parceiros).map(function (x) {
       return { nome: String(x.nome || ''), link: String(x.link || ''), logo: String(x.logo || '') };
+    });
+    saida.extras = clonar(Array.isArray(c.extras) ? c.extras : []).map(function (x, i) {
+      return {
+        id: String(x.id || ('s' + (i + 1))).replace(/[^a-z0-9-]/gi, '') || ('s' + (i + 1)),
+        ativa: x.ativa !== false,
+        etiqueta: String(x.etiqueta || ''),
+        titulo: String(x.titulo || ''),
+        texto: String(x.texto || ''),
+        img: String(x.img || ''),
+        imgAlt: String(x.imgAlt || ''),
+        ladoImg: x.ladoImg === 'esquerda' ? 'esquerda' : 'direita',
+        botaoTexto: String(x.botaoTexto || ''),
+        botaoLink: String(x.botaoLink || ''),
+        depoisDe: POSICOES.some(function (p) { return p[0] === x.depoisDe; }) ? x.depoisDe : 'projetos',
+        menu: !!x.menu,
+        menuNome: String(x.menuNome || '')
+      };
     });
     Object.keys(PADRAO.textos).forEach(function (k) {
       saida.textos[k] = (c.textos && c.textos[k] != null) ? c.textos[k] : PADRAO.textos[k];
@@ -209,7 +239,31 @@ var ADDAI = (function () {
 
   /* Liga/desliga seções e os links que apontam para elas (data-secao).
      Informativos, impacto e parceiros também somem quando estão vazios. */
+  /* Links das seções personalizadas no menu e no rodapé (todas as páginas). */
+  function linksExtras(c) {
+    var naInicial = !!document.getElementById('carrossel');
+    document.querySelectorAll('[data-extra]').forEach(function (el) { el.remove(); });
+    var botaoDoar = document.querySelector('#menu .nav-item.ms-lg-2');
+    var rodape = document.querySelector('footer [data-secao="informativos"]');
+    c.extras.forEach(function (s) {
+      if (!s.ativa || !s.menu || !(s.menuNome || s.titulo)) return;
+      var href = (naInicial ? '' : 'index.html') + '#sec-' + s.id;
+      if (botaoDoar) {
+        var li = document.createElement('li'); li.className = 'nav-item'; li.setAttribute('data-extra', '');
+        var a = document.createElement('a'); a.className = 'nav-link'; a.href = href; a.textContent = s.menuNome || s.titulo;
+        li.appendChild(a); botaoDoar.parentNode.insertBefore(li, botaoDoar);
+      }
+      if (rodape) {
+        var li2 = document.createElement('li'); li2.setAttribute('data-extra', '');
+        var a2 = document.createElement('a'); a2.href = href; a2.textContent = s.menuNome || s.titulo;
+        li2.appendChild(a2); rodape.parentNode.insertBefore(li2, rodape.nextSibling);
+        rodape = li2;
+      }
+    });
+  }
+
   function aplicarSecoes(c) {
+    linksExtras(c);
     var visivel = {
       sobre: c.secoes.sobre,
       projetos: c.secoes.projetos,
@@ -237,6 +291,7 @@ var ADDAI = (function () {
   return {
     PADRAO: PADRAO,
     SECOES: SECOES,
+    POSICOES: POSICOES,
     aplicarSecoes: aplicarSecoes,
     clonar: clonar,
     completar: completar,

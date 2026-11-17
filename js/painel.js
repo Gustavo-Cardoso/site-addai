@@ -51,6 +51,7 @@
     desenharInformativos();
     desenharImpacto();
     desenharParceiros();
+    desenharExtras();
     desenharSlides();
   }
 
@@ -136,6 +137,99 @@
 
     pintar();
     return { previa: previa, arquivo: arquivo, caminho: caminho, tirar: tirar, pintar: pintar };
+  }
+
+  /* O item recém-criado fica em primeiro: rola até ele, pisca e foca o título. */
+  function destacarNovo(idArea) {
+    var card = $(idArea).querySelector('.info-card, .slide-card');
+    if (!card) return;
+    card.classList.add('recem-criado');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var titulo = card.querySelector('input:not([type=file]):not([type=checkbox])');
+    if (titulo) { titulo.focus({ preventScroll: true }); titulo.select(); }
+  }
+
+  /* ---------- seções personalizadas ---------- */
+  function desenharExtras() {
+    var area = $('extrasWrap');
+    area.innerHTML = '';
+    if (!dados.extras.length) {
+      area.appendChild(el('p', { 'class': 'text-secondary small mb-0', text: 'Nenhuma seção personalizada.' }));
+      return;
+    }
+    var total = dados.extras.length;
+    dados.extras.forEach(function (s, i) {
+      var dono = 'seção ' + (i + 1);
+
+      var ativa = el('input', { type: 'checkbox', role: 'switch', 'class': 'form-check-input', id: 'extraAtiva' + i });
+      ativa.checked = s.ativa;
+      ativa.addEventListener('change', function () { s.ativa = ativa.checked; card.classList.toggle('extra-inativa', !s.ativa); });
+
+      var cab = el('div', { 'class': 'd-flex justify-content-between align-items-center gap-2 mb-3 flex-wrap' }, [
+        el('div', { 'class': 'd-flex align-items-center gap-3' }, [
+          el('strong', { text: 'Seção ' + (i + 1) }),
+          el('div', { 'class': 'form-check form-switch mb-0' }, [ativa, el('label', { 'class': 'form-check-label small', 'for': 'extraAtiva' + i, text: 'Visível no site' })])
+        ]),
+        el('div', { 'class': 'btn-group' }, [
+          botao('↑', 'btn-outline-secondary', 'Mover ' + dono + ' para cima', function () { dados.extras.splice(i - 1, 0, dados.extras.splice(i, 1)[0]); desenharExtras(); }, i === 0),
+          botao('↓', 'btn-outline-secondary', 'Mover ' + dono + ' para baixo', function () { dados.extras.splice(i + 1, 0, dados.extras.splice(i, 1)[0]); desenharExtras(); }, i === total - 1),
+          botao('Remover', 'btn-outline-danger', 'Remover ' + dono, function () { dados.extras.splice(i, 1); desenharExtras(); })
+        ])
+      ]);
+
+      var texto = el('textarea', { 'class': 'form-control mb-2', rows: '6', 'aria-label': 'Texto — ' + dono,
+        placeholder: 'Texto da seção. Deixe uma linha em branco entre os parágrafos; links (https://…) ficam clicáveis.' });
+      texto.value = s.texto;
+      texto.addEventListener('input', function () { s.texto = texto.value; });
+
+      var onde = el('select', { 'class': 'form-select form-select-sm', 'aria-label': 'Onde a seção aparece — ' + dono });
+      ADDAI.POSICOES.forEach(function (p) {
+        var o = el('option', { value: p[0], text: 'Depois de: ' + p[1] });
+        if (s.depoisDe === p[0]) o.selected = true;
+        onde.appendChild(o);
+      });
+      onde.addEventListener('change', function () { s.depoisDe = onde.value; });
+
+      var noMenu = el('input', { type: 'checkbox', 'class': 'form-check-input', id: 'extraMenu' + i });
+      noMenu.checked = s.menu;
+      var nomeMenu = campo(s, 'menuNome', 'Nome no menu (curto, ex.: Eventos)', dono, 'form-control form-control-sm mt-1');
+      nomeMenu.classList.toggle('d-none', !s.menu);
+      noMenu.addEventListener('change', function () { s.menu = noMenu.checked; nomeMenu.classList.toggle('d-none', !s.menu); });
+
+      var colTextos = el('div', { 'class': 'col-md-7' }, [
+        campo(s, 'etiqueta', 'Etiqueta pequena acima do título (opcional)', dono),
+        campo(s, 'titulo', 'Título', dono),
+        texto,
+        el('div', { 'class': 'row g-2' }, [
+          el('div', { 'class': 'col-6' }, [campo(s, 'botaoTexto', 'Texto do botão (opcional)', dono)]),
+          el('div', { 'class': 'col-6' }, [campo(s, 'botaoLink', 'Link do botão (ex.: #contato)', dono)])
+        ])
+      ]);
+
+      var foto = blocoFoto(s, {
+        dono: dono, larguraMax: 1200, textoVazio: 'sem imagem (texto centralizado)',
+        classeVazia: function () { return 'info-sem-foto'; },
+        redesenhar: desenharExtras
+      });
+      var lado = el('select', { 'class': 'form-select form-select-sm', 'aria-label': 'Lado da imagem — ' + dono });
+      [['direita', 'Imagem à direita'], ['esquerda', 'Imagem à esquerda']].forEach(function (o) {
+        var op = el('option', { value: o[0], text: o[1] }); if (s.ladoImg === o[0]) op.selected = true; lado.appendChild(op);
+      });
+      lado.addEventListener('change', function () { s.ladoImg = lado.value; });
+
+      var colLado = el('div', { 'class': 'col-md-5' }, [
+        el('label', { 'class': 'form-label small mb-1', text: 'Posição na página' }), onde,
+        el('div', { 'class': 'form-check mt-2' }, [noMenu, el('label', { 'class': 'form-check-label small', 'for': 'extraMenu' + i, text: 'Mostrar no menu' })]),
+        nomeMenu,
+        el('hr', { 'class': 'my-3' }),
+        foto.previa, foto.arquivo, foto.caminho,
+        campo(s, 'imgAlt', 'Descrição da imagem (para leitores de tela)', dono, 'form-control form-control-sm mb-2'),
+        el('div', { 'class': 'd-flex gap-2' }, [lado, foto.tirar])
+      ]);
+
+      var card = el('div', { 'class': 'info-card p-3' + (s.ativa ? '' : ' extra-inativa') }, [cab, el('div', { 'class': 'row g-3' }, [colTextos, colLado])]);
+      area.appendChild(card);
+    });
   }
 
   /* ---------- seções ---------- */
@@ -438,8 +532,14 @@
     $('addInfo').addEventListener('click', function () {
       dados.informativos.unshift({ id: 'i' + Date.now().toString(36), titulo: 'Novo informativo', data: hoje(), img: '', imgAlt: '', texto: '' });
       desenharInformativos();
-      var primeiro = $('infosWrap').querySelector('input');
-      if (primeiro) { primeiro.focus(); primeiro.select(); }
+      destacarNovo('infosWrap');
+    });
+
+    $('addExtra').addEventListener('click', function () {
+      dados.extras.unshift({ id: 's' + Date.now().toString(36), ativa: true, etiqueta: '', titulo: 'Nova seção', texto: '', img: '', imgAlt: '',
+        ladoImg: 'direita', botaoTexto: '', botaoLink: '', depoisDe: 'projetos', menu: false, menuNome: '' });
+      desenharExtras();
+      destacarNovo('extrasWrap');
     });
 
     $('addImpacto').addEventListener('click', function () {
@@ -456,8 +556,9 @@
     });
 
     $('addSlide').addEventListener('click', function () {
-      dados.slides.push({ titulo: 'Novo slide', subtitulo: '', img: '', cor: 'slide-a', botaoTexto: '', botaoLink: '#ajudar' });
+      dados.slides.unshift({ titulo: 'Novo slide', subtitulo: '', img: '', cor: 'slide-a', botaoTexto: '', botaoLink: '#ajudar' });
       desenharSlides();
+      destacarNovo('slidesWrap');
     });
 
     $('salvar').addEventListener('click', function () {

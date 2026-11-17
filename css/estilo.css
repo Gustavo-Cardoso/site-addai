@@ -113,6 +113,11 @@ footer a:hover{color:#fff}
 .info-texto{font-size:1.08rem;line-height:1.75;overflow-wrap:anywhere}
 .info-voltar{font-weight:600;text-decoration:none}
 
+/* seções personalizadas */
+.img-extra{width:100%;border-radius:18px;box-shadow:0 20px 50px -24px rgba(16,36,59,.35)}
+.texto-extra{font-size:1.05rem;line-height:1.75;overflow-wrap:anywhere}
+.texto-centro{max-width:760px}
+
 /* aviso de prévia (rascunho do painel) */
 .previa-banner{background:#fff4d6;color:#7a5a12;border-bottom:2px solid var(--amber);padding:.6rem 1rem;text-align:center;font-size:.92rem}
 .previa-banner a{color:#7a5a12;font-weight:700;margin-left:.5rem}

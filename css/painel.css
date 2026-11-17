@@ -17,3 +17,7 @@ body.painel{background:#eef3f9}
 .item-linha{border:1px solid #dbe4ee;border-radius:12px;background:#fff}
 .logo-prev{background-color:#fff!important;background-size:contain!important;border:1px solid #dbe4ee;color:#6b86a4!important}
 .login-caixa{max-width:460px;margin-top:2rem}
+
+@keyframes destaque{from{box-shadow:0 0 0 4px rgba(255,122,89,.75)}to{box-shadow:0 0 0 4px rgba(255,122,89,0)}}
+.recem-criado{animation:destaque 2.2s ease-out}
+.extra-inativa{opacity:.65}

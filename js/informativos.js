@@ -166,5 +166,5 @@ var Informativos = (function () {
 
   document.addEventListener('DOMContentLoaded', ligarPagina);
 
-  return { mostrarDestaques: mostrarDestaques, dataPorExtenso: dataPorExtenso };
+  return { mostrarDestaques: mostrarDestaques, dataPorExtenso: dataPorExtenso, textoParaDom: textoParaDom };
 })();
