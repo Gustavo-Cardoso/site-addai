@@ -1,4 +1,30 @@
 {
+  "secoes": {
+    "sobre": true,
+    "informativos": true,
+    "projetos": true,
+    "impacto": true,
+    "parceiros": true
+  },
+  "impacto": [
+    {
+      "valor": "",
+      "rotulo": "famílias acolhidas"
+    },
+    {
+      "valor": "",
+      "rotulo": "voluntários"
+    },
+    {
+      "valor": "",
+      "rotulo": "ações por ano"
+    },
+    {
+      "valor": "",
+      "rotulo": "ano de fundação"
+    }
+  ],
+  "parceiros": [],
   "textos": {
     "navDoar": "Doe agora",
     "bemvindoTitulo": "Bem-vindo à ADDAI",

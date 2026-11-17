@@ -13,3 +13,6 @@ body.painel{background:#eef3f9}
 #jsonOut{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.8rem;min-height:200px}
 
 .barra-acoes{position:sticky;bottom:0;background:#eef3f9;padding:12px 0;border-top:1px solid #dbe4ee;z-index:5}
+
+.item-linha{border:1px solid #dbe4ee;border-radius:12px;background:#fff}
+.logo-prev{background-color:#fff!important;background-size:contain!important;border:1px solid #dbe4ee;color:#6b86a4!important}

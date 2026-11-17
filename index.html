@@ -51,9 +51,9 @@
     </button>
     <div class="collapse navbar-collapse" id="menu">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-        <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
-        <li class="nav-item" id="navInformativos"><a class="nav-link" href="#informativos">Informativos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#projetos">O que fazemos</a></li>
+        <li class="nav-item" data-secao="sobre"><a class="nav-link" href="#sobre">Sobre</a></li>
+        <li class="nav-item" data-secao="informativos"><a class="nav-link" href="#informativos">Informativos</a></li>
+        <li class="nav-item" data-secao="projetos"><a class="nav-link" href="#projetos">O que fazemos</a></li>
         <li class="nav-item"><a class="nav-link" href="#ajudar">Como ajudar</a></li>
         <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
         <li class="nav-item ms-lg-2"><a class="btn btn-marca" href="#ajudar" data-key="navDoar">Doe agora</a></li>
@@ -76,7 +76,7 @@
 </div>
 
 <!-- ===== Boas-vindas ===== -->
-<section class="py-5 bg-white">
+<section class="py-5 bg-white secao-alterna">
   <div class="container text-center">
     <span class="eyebrow">Seja bem-vindo</span>
     <h2 class="fw-bold mt-2" data-key="bemvindoTitulo">Bem-vindo à ADDAI</h2>
@@ -87,7 +87,7 @@
 </section>
 
 <!-- ===== Quem somos ===== -->
-<section id="sobre" class="py-5 secao-clara">
+<section id="sobre" class="py-5 secao-clara secao-alterna">
   <div class="container">
     <div class="row align-items-center g-4 g-lg-5">
       <div class="col-lg-6">
@@ -110,7 +110,7 @@
 </section>
 
 <!-- ===== Informativos (os 4 mais recentes; lista completa em informativos.html) ===== -->
-<section id="informativos" class="py-5 bg-white">
+<section id="informativos" class="py-5 bg-white secao-alterna">
   <div class="container">
     <div class="text-center mb-5">
       <span class="eyebrow">Fique por dentro</span>
@@ -124,7 +124,7 @@
 </section>
 
 <!-- ===== O que fazemos ===== -->
-<section id="projetos" class="py-5 secao-clara">
+<section id="projetos" class="py-5 secao-clara secao-alterna">
   <div class="container">
     <div class="text-center mb-5">
       <span class="eyebrow">Nossos pilares</span>
@@ -140,19 +140,14 @@
 </section>
 
 <!-- ===== Impacto ===== -->
-<section class="py-5 secao-impacto text-white">
+<section id="impacto" class="py-5 secao-impacto text-white">
   <div class="container">
-    <div class="row text-center g-4">
-      <div class="col-6 col-lg-3"><div class="stat ph">+120</div><p class="mb-0">famílias acolhidas</p></div>
-      <div class="col-6 col-lg-3"><div class="stat ph">+30</div><p class="mb-0">voluntários</p></div>
-      <div class="col-6 col-lg-3"><div class="stat ph">+15</div><p class="mb-0">ações por ano</p></div>
-      <div class="col-6 col-lg-3"><div class="stat ph">2025</div><p class="mb-0">desde</p></div>
-    </div>
+    <div class="row text-center g-4 justify-content-center" id="impactoGrid"><!-- números via painel --></div>
   </div>
 </section>
 
 <!-- ===== Como ajudar ===== -->
-<section id="ajudar" class="py-5 secao-clara">
+<section id="ajudar" class="py-5 secao-clara secao-alterna">
   <div class="container">
     <div class="text-center mb-5">
       <span class="eyebrow">Faça parte</span>
@@ -172,16 +167,11 @@
 </section>
 
 <!-- ===== Parceiros ===== -->
-<section id="parceiros" class="py-5 bg-white">
+<section id="parceiros" class="py-5 bg-white secao-alterna d-none">
   <div class="container text-center">
     <span class="eyebrow">Quem apoia</span>
     <h2 class="fw-bold mt-2 mb-4">Nossos parceiros</h2>
-    <div class="row g-4 justify-content-center align-items-center">
-      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 1]</div></div>
-      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 2]</div></div>
-      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 3]</div></div>
-      <div class="col-6 col-md-3"><div class="parceiro ph">[logo parceiro 4]</div></div>
-    </div>
+    <div class="row g-4 justify-content-center align-items-center" id="parceirosGrid"><!-- logos via painel --></div>
   </div>
 </section>
 
@@ -226,7 +216,7 @@
         <p class="opacity-75" style="max-width:34ch">Acolhimento, inclusão e defesa dos direitos de pessoas autistas e suas famílias.</p>
       </div>
       <div class="col-6 col-lg-3"><h4>Navegação</h4><ul class="list-unstyled">
-        <li><a href="#sobre">Sobre</a></li><li><a href="informativos.html">Informativos</a></li>
+        <li data-secao="sobre"><a href="#sobre">Sobre</a></li><li data-secao="informativos"><a href="informativos.html">Informativos</a></li>
         <li><a href="#ajudar">Como ajudar</a></li><li><a href="#contato">Contato</a></li></ul></div>
       <div class="col-6 col-lg-4"><h4>Gestão</h4><ul class="list-unstyled">
         <li><a href="painel.html">Painel de controle</a></li>

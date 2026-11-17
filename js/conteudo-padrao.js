@@ -11,7 +11,26 @@ var ADDAI = (function () {
   var CHAVE_RASCUNHO = 'addai_rascunho';
   var CHAVE_PREVIA = 'addai_previa';
 
+  // Seções que podem ser ligadas/desligadas no painel
+  var SECOES = [
+    ['sobre', 'Quem somos'],
+    ['informativos', 'Informativos'],
+    ['projetos', 'O que fazemos'],
+    ['impacto', 'Números de impacto'],
+    ['parceiros', 'Parceiros']
+  ];
+
   var PADRAO = {
+    secoes: { sobre: true, informativos: true, projetos: true, impacto: true, parceiros: true },
+    // valor vazio = o site mostra o marcador amarelo
+    impacto: [
+      { valor: '', rotulo: 'famílias acolhidas' },
+      { valor: '', rotulo: 'voluntários' },
+      { valor: '', rotulo: 'ações por ano' },
+      { valor: '', rotulo: 'ano de fundação' }
+    ],
+    // vazio = a seção de parceiros não aparece no site
+    parceiros: [],
     textos: {
       navDoar: 'Doe agora',
       bemvindoTitulo: 'Bem-vindo à ADDAI',
@@ -51,7 +70,16 @@ var ADDAI = (function () {
      (o que faltar vem do PADRAO). */
   function completar(c) {
     c = c || {};
-    var saida = { textos: {}, slides: [], informativos: [] };
+    var saida = { secoes: {}, impacto: [], parceiros: [], textos: {}, slides: [], informativos: [] };
+    Object.keys(PADRAO.secoes).forEach(function (k) {
+      saida.secoes[k] = (c.secoes && typeof c.secoes[k] === 'boolean') ? c.secoes[k] : PADRAO.secoes[k];
+    });
+    saida.impacto = clonar(Array.isArray(c.impacto) ? c.impacto : PADRAO.impacto).map(function (x) {
+      return { valor: String(x.valor || ''), rotulo: String(x.rotulo || '') };
+    });
+    saida.parceiros = clonar(Array.isArray(c.parceiros) ? c.parceiros : PADRAO.parceiros).map(function (x) {
+      return { nome: String(x.nome || ''), link: String(x.link || ''), logo: String(x.logo || '') };
+    });
     Object.keys(PADRAO.textos).forEach(function (k) {
       saida.textos[k] = (c.textos && c.textos[k] != null) ? c.textos[k] : PADRAO.textos[k];
     });
@@ -132,8 +160,84 @@ var ADDAI = (function () {
     if (ano) ano.textContent = new Date().getFullYear();
   }
 
+  /* ---------- seções ---------- */
+  function mostrar(elem, visivel) { if (elem) elem.classList.toggle('d-none', !visivel); }
+
+  function linkSeguro(url) { return /^https?:\/\//i.test(String(url || '').trim()); }
+
+  function montarImpacto(c) {
+    var grade = document.getElementById('impactoGrid');
+    if (!grade) return;
+    grade.innerHTML = '';
+    c.impacto.forEach(function (item) {
+      var col = document.createElement('div');
+      col.className = 'col-6 col-lg-3';
+      var valor = document.createElement('div');
+      valor.className = 'stat' + (item.valor ? '' : ' ph');
+      valor.textContent = item.valor || '[000]';
+      var rotulo = document.createElement('p');
+      rotulo.className = 'mb-0';
+      rotulo.textContent = item.rotulo;
+      col.appendChild(valor); col.appendChild(rotulo);
+      grade.appendChild(col);
+    });
+  }
+
+  function montarParceiros(c) {
+    var grade = document.getElementById('parceirosGrid');
+    if (!grade) return;
+    grade.innerHTML = '';
+    c.parceiros.forEach(function (p) {
+      var col = document.createElement('div');
+      col.className = 'col-6 col-md-4 col-lg-3';
+      var caixa = document.createElement(linkSeguro(p.link) ? 'a' : 'div');
+      caixa.className = 'parceiro';
+      if (linkSeguro(p.link)) { caixa.href = p.link.trim(); caixa.target = '_blank'; caixa.rel = 'noopener'; }
+      if (p.logo) {
+        var img = document.createElement('img');
+        img.src = p.logo; img.alt = p.nome || 'Parceiro';
+        caixa.appendChild(img);
+      } else {
+        caixa.classList.add('parceiro-nome');
+        caixa.textContent = p.nome || 'Parceiro';
+      }
+      if (p.nome) caixa.title = p.nome;
+      col.appendChild(caixa);
+      grade.appendChild(col);
+    });
+  }
+
+  /* Liga/desliga seções e os links que apontam para elas (data-secao).
+     Informativos, impacto e parceiros também somem quando estão vazios. */
+  function aplicarSecoes(c) {
+    var visivel = {
+      sobre: c.secoes.sobre,
+      projetos: c.secoes.projetos,
+      impacto: c.secoes.impacto && c.impacto.length > 0,
+      informativos: c.secoes.informativos && c.informativos.length > 0,
+      parceiros: c.secoes.parceiros && c.parceiros.length > 0
+    };
+    Object.keys(visivel).forEach(function (k) {
+      mostrar(document.getElementById(k), visivel[k]);
+      document.querySelectorAll('[data-secao="' + k + '"]').forEach(function (el) { mostrar(el, visivel[k]); });
+    });
+    montarImpacto(c);
+    montarParceiros(c);
+    // mantém o fundo alternado (branco / azul-claro) entre as seções visíveis
+    var n = 0;
+    document.querySelectorAll('.secao-alterna').forEach(function (s) {
+      if (s.classList.contains('d-none')) return;
+      s.classList.toggle('bg-white', n % 2 === 0);
+      s.classList.toggle('secao-clara', n % 2 === 1);
+      n++;
+    });
+    return visivel;
+  }
+
   return {
     PADRAO: PADRAO,
+    SECOES: SECOES,
+    aplicarSecoes: aplicarSecoes,
     clonar: clonar,
     completar: completar,
     lerRascunho: lerRascunho,

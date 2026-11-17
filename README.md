@@ -11,7 +11,7 @@ Site institucional da **ADDAI**, associação sem fins lucrativos de acolhimento
 - Site responsivo (celular, tablet e computador)
 - Carrossel de imagens com botão de pausar
 - **Informativos:** os 4 mais recentes na página inicial e uma página com a lista completa e a leitura de cada um
-- Painel de controle (`painel.html`) para editar informativos, slides, textos e dados da associação — sem mexer no código
+- Painel de controle (`painel.html`) para ligar/desligar seções e editar informativos, parceiros, números de impacto, slides, textos e dados da associação — sem mexer no código
 - Doação por PIX com botão de copiar a chave
 - Cuidados de acessibilidade: navegação por teclado, foco visível, respeito à preferência de menos movimento
 
@@ -56,6 +56,11 @@ O site lê o `conteudo.json`, e o navegador só permite isso por um servidor loc
 
 O painel não publica nada sozinho: qualquer pessoa pode abri-lo, mas só quem tem acesso a este repositório consegue alterar o site.
 
+### Seções
+
+Em **Seções do site** dá para desligar Quem somos, Informativos, O que fazemos, Números de impacto e Parceiros. O link do menu some junto.
+Informativos, Números de impacto e Parceiros também ficam escondidos enquanto estiverem vazios — por isso a seção de parceiros só aparece depois do primeiro parceiro cadastrado.
+
 ### Informativos
 
 No painel, clique em **+ Novo informativo** e preencha título, data, texto e (se quiser) uma foto.
@@ -86,7 +91,8 @@ O arquivo `.nojekyll` avisa o GitHub para publicar os arquivos como estão.
 
 - [ ] Preencher no painel: telefone, e-mail, endereço, PIX e CNPJ
 - [ ] Trocar os informativos de exemplo por informativos reais
-- [ ] Trocar em `index.html` os trechos em amarelo que restarem (números de impacto, parceiros, foto da equipe)
+- [ ] Preencher os números de impacto (ou desligar a seção) e cadastrar parceiros, se houver
+- [ ] Trocar a foto da equipe em `index.html`
 - [ ] Revisar os textos com a diretoria da ADDAI
 - [ ] Colocar o endereço do site no campo **About** do repositório
 

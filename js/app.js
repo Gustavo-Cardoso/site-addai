@@ -89,6 +89,7 @@
       ADDAI.aplicarTextos(c);
       montarCarrossel(c);
       Informativos.mostrarDestaques(c);
+      ADDAI.aplicarSecoes(c);
     });
   });
 })();

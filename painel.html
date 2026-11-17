@@ -33,6 +33,12 @@
     Você tem um <strong>rascunho</strong> salvo neste navegador. Ele só aparece na prévia — os visitantes continuam vendo o conteúdo publicado.
   </div>
 
+  <!-- ===== Seções ===== -->
+  <h2 class="h4 fw-bold mb-1">Seções do site</h2>
+  <p class="text-secondary small">Desligue o que a ADDAI ainda não usa. Informativos, Números de impacto e Parceiros também ficam escondidos enquanto estiverem vazios.
+    Boas-vindas, Como ajudar e Contato ficam sempre visíveis.</p>
+  <div class="card card-body mb-4" id="secoesWrap"></div>
+
   <!-- ===== Informativos ===== -->
   <div class="d-flex align-items-center justify-content-between mb-1">
     <h2 class="h4 fw-bold mb-0">Informativos</h2>
@@ -48,6 +54,22 @@
   </div>
   <p class="text-secondary small">Fotos escolhidas do computador são reduzidas automaticamente e ficam embutidas no <code>conteudo.json</code>. Use sempre fotos com autorização de quem aparece nelas.</p>
   <div id="slidesWrap" class="d-grid gap-3 mb-4"></div>
+
+  <!-- ===== Impacto ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Números de impacto</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addImpacto">+ Adicionar número</button>
+  </div>
+  <p class="text-secondary small">Ex.: valor "+120", texto "famílias acolhidas". Valor vazio aparece como marcador amarelo.</p>
+  <div id="impactoWrap" class="d-grid gap-2 mb-4"></div>
+
+  <!-- ===== Parceiros ===== -->
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <h2 class="h4 fw-bold mb-0">Parceiros</h2>
+    <button type="button" class="btn btn-marca btn-sm" id="addParceiro">+ Adicionar parceiro</button>
+  </div>
+  <p class="text-secondary small">Sem parceiros cadastrados, a seção não aparece no site. Prefira logos em PNG com fundo transparente.</p>
+  <div id="parceirosWrap" class="d-grid gap-3 mb-4"></div>
 
   <!-- ===== Textos ===== -->
   <h2 class="h4 fw-bold mb-3">Textos da página inicial</h2>

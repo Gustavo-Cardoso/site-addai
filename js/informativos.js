@@ -104,17 +104,13 @@ var Informativos = (function () {
   function mostrarDestaques(c) {
     var secao = $('informativos');
     if (!secao) return;
-    var lista = ordenar(c.informativos);
-    var vazio = lista.length === 0;
-    secao.classList.toggle('d-none', vazio);
-    var menu = $('navInformativos');
-    if (menu) menu.classList.toggle('d-none', vazio);
+    var lista = ordenar(c.informativos);  // mostrar/ocultar fica em ADDAI.aplicarSecoes
     grade($('informativosGrid'), lista.slice(0, DESTAQUES), 'col-sm-6 col-lg-3', false);
   }
 
   /* ---------- informativos.html ---------- */
   function mostrarPagina(c) {
-    var lista = ordenar(c.informativos);
+    var lista = c.secoes.informativos ? ordenar(c.informativos) : []; // seção desligada no painel
     var id = (location.hash || '').slice(1);
     try { id = decodeURIComponent(id); } catch (e) { /* endereço malformado: usa como veio */ }
     var areaLista = $('infoLista'), areaDetalhe = $('infoDetalhe');
@@ -155,6 +151,7 @@ var Informativos = (function () {
     ADDAI.carregar().then(function (c) {
       conteudo = c;
       ADDAI.aplicarTextos(c);
+      ADDAI.aplicarSecoes(c);
       mostrarPagina(c);
     });
     window.addEventListener('hashchange', function () { if (conteudo) mostrarPagina(conteudo); });

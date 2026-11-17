@@ -46,7 +46,10 @@
       var campo = $('t_' + k);
       if (campo) campo.value = dados.textos[k] || '';
     });
+    desenharSecoes();
     desenharInformativos();
+    desenharImpacto();
+    desenharParceiros();
     desenharSlides();
   }
 
@@ -76,7 +79,7 @@
   function ehEmbutida(img) { return !!img && img.indexOf('data:') === 0; }
 
   /* Reduz e comprime a foto no próprio navegador (nada é enviado a servidor). */
-  function comprimirFoto(arquivo, larguraMax, pronto) {
+  function comprimirFoto(arquivo, larguraMax, pronto, formato) {
     var leitor = new FileReader();
     leitor.onerror = function () { pronto(null); };
     leitor.onload = function () {
@@ -88,7 +91,7 @@
         var tela = document.createElement('canvas');
         tela.width = w; tela.height = h;
         tela.getContext('2d').drawImage(img, 0, 0, w, h);
-        pronto(tela.toDataURL('image/jpeg', 0.82));
+        pronto(formato === 'png' ? tela.toDataURL('image/png') : tela.toDataURL('image/jpeg', 0.82));
       };
       img.src = leitor.result;
     };
@@ -97,14 +100,14 @@
 
   /* Miniatura + escolher arquivo + caminho + tirar foto (usado em slides e informativos). */
   function blocoFoto(item, cfg) {
-    var previa = el('div', { 'class': 'slide-prev mb-2' });
+    var previa = el('div', { 'class': 'slide-prev mb-2' + (cfg.classeExtra || '') });
     var tirar = botao('Tirar foto', 'btn-outline-secondary text-nowrap', 'Remover a foto — ' + cfg.dono, function () {
       item.img = ''; cfg.redesenhar();
     }, !item.img);
 
     function pintar() {
       var img = item.img;
-      previa.className = 'slide-prev mb-2 ' + (img ? '' : cfg.classeVazia());
+      previa.className = 'slide-prev mb-2 ' + (img ? '' : cfg.classeVazia()) + (cfg.classeExtra || '');
       previa.style.backgroundImage = img ? 'url("' + String(img).replace(/"/g, '%22') + '")' : '';
       previa.textContent = img ? '' : cfg.textoVazio;
       tirar.disabled = !img;
@@ -119,7 +122,7 @@
         item.img = dataUrl;
         cfg.redesenhar();
         aviso('Foto adicionada (' + Math.round(dataUrl.length / 1024) + ' KB, já reduzida).');
-      });
+      }, cfg.formato);
     });
 
     var caminho = el('input', {
@@ -132,6 +135,68 @@
 
     pintar();
     return { previa: previa, arquivo: arquivo, caminho: caminho, tirar: tirar, pintar: pintar };
+  }
+
+  /* ---------- seções ---------- */
+  function desenharSecoes() {
+    var area = $('secoesWrap');
+    area.innerHTML = '';
+    ADDAI.SECOES.forEach(function (s) {
+      var id = 'sec_' + s[0];
+      var chk = el('input', { type: 'checkbox', role: 'switch', 'class': 'form-check-input', id: id });
+      chk.checked = !!dados.secoes[s[0]];
+      chk.addEventListener('change', function () { dados.secoes[s[0]] = chk.checked; });
+      area.appendChild(el('div', { 'class': 'form-check form-switch mb-2' }, [chk, el('label', { 'class': 'form-check-label', 'for': id, text: s[1] })]));
+    });
+  }
+
+  /* ---------- números de impacto ---------- */
+  function desenharImpacto() {
+    var area = $('impactoWrap');
+    area.innerHTML = '';
+    if (!dados.impacto.length) {
+      area.appendChild(el('p', { 'class': 'text-secondary small mb-0', text: 'Nenhum número. A faixa de impacto não aparece no site.' }));
+      return;
+    }
+    dados.impacto.forEach(function (item, i) {
+      var dono = 'número ' + (i + 1);
+      area.appendChild(el('div', { 'class': 'item-linha p-2 d-flex gap-2 align-items-center' }, [
+        el('div', { 'style': 'width:7.5rem;flex:none' }, [campo(item, 'valor', 'Valor (+120)', dono, 'form-control')]),
+        el('div', { 'class': 'flex-grow-1' }, [campo(item, 'rotulo', 'Texto (famílias acolhidas)', dono, 'form-control')]),
+        botao('✕', 'btn-outline-danger', 'Remover ' + dono, function () { dados.impacto.splice(i, 1); desenharImpacto(); })
+      ]));
+    });
+  }
+
+  /* ---------- parceiros ---------- */
+  function desenharParceiros() {
+    var area = $('parceirosWrap');
+    area.innerHTML = '';
+    if (!dados.parceiros.length) {
+      area.appendChild(el('p', { 'class': 'text-secondary small mb-0', text: 'Nenhum parceiro cadastrado.' }));
+      return;
+    }
+    dados.parceiros.forEach(function (p, i) {
+      var dono = 'parceiro ' + (i + 1);
+      var item = { img: p.logo }; // blocoFoto trabalha com "img"
+      var foto = blocoFoto(item, {
+        dono: dono, larguraMax: 400, formato: 'png', textoVazio: 'sem logo (mostra o nome)', classeExtra: ' logo-prev',
+        classeVazia: function () { return ''; },
+        redesenhar: function () { p.logo = item.img; desenharParceiros(); }
+      });
+      foto.caminho.addEventListener('input', function () { p.logo = item.img; });
+
+      var cab = el('div', { 'class': 'd-flex justify-content-between align-items-center mb-3' }, [
+        el('strong', { text: 'Parceiro ' + (i + 1) }),
+        botao('Remover', 'btn-outline-danger', 'Remover ' + dono, function () { dados.parceiros.splice(i, 1); desenharParceiros(); })
+      ]);
+      var colTextos = el('div', { 'class': 'col-md-7' }, [
+        campo(p, 'nome', 'Nome do parceiro', dono),
+        campo(p, 'link', 'Site ou Instagram (https://…), opcional', dono)
+      ]);
+      var colLogo = el('div', { 'class': 'col-md-5' }, [foto.previa, foto.arquivo, foto.caminho, foto.tirar]);
+      area.appendChild(el('div', { 'class': 'info-card p-3' }, [cab, el('div', { 'class': 'row g-3' }, [colTextos, colLogo])]));
+    });
   }
 
   /* ---------- informativos ---------- */
@@ -296,6 +361,19 @@
       desenharInformativos();
       var primeiro = $('infosWrap').querySelector('input');
       if (primeiro) { primeiro.focus(); primeiro.select(); }
+    });
+
+    $('addImpacto').addEventListener('click', function () {
+      dados.impacto.push({ valor: '', rotulo: '' });
+      desenharImpacto();
+    });
+
+    $('addParceiro').addEventListener('click', function () {
+      dados.parceiros.push({ nome: '', link: '', logo: '' });
+      desenharParceiros();
+      var ultimo = $('parceirosWrap').querySelectorAll('.info-card');
+      ultimo = ultimo[ultimo.length - 1];
+      if (ultimo) ultimo.querySelector('input').focus();
     });
 
     $('addSlide').addEventListener('click', function () {
